@@ -1,36 +1,49 @@
 import fromStore from './store/store.js';
-import { setCurrentSlide } from './store/actions.js';
-import createNoteCloserBtn from './helpers/closer-btn.js';
-import { getNoteByIndex, renderNotes, addNoteContent } from './helpers/notes.js';
+import { renderNotes } from './helpers/notes.js';
 import handleRecording from './helpers/recorder.js';
-import { readBespokeCurrentSlideIndex, getStatusBoxEl } from './helpers/utils.js';
-// import { renderModal } from './modal.js';
+import { optToSliderButtons, getStatusBoxEl, dispatchCurrentSlideIndex } from './helpers/utils.js';
 
 const rootEl = document.getElementById('root');
 
+/**
+ *
+ * @returns {HTMLButtonElement}
+ */
+const getDownloadBtn = () => document.querySelector('.btn-download');
+
 export default function () {
   dispatchCurrentSlideIndex();
+  optToSliderButtons();
   handleRecording();
+  handleDownloadClick();
   fromStore.subscribe(({ notesLength, notes, recording }) => {
     getStatusBoxEl().innerHTML = !!recording ? `<p>Recording</P>` : '<small style="color: #ccc; font-size: small;">Click `R` to record</small>';
     renderNotes({ notes }, rootEl);
+    getDownloadBtn().style.opacity = !!notesLength ? 1 : 0;
   });
 }
 
-// Opt in to slider buttons clicks events
-const nextBtn = document.querySelector('button[data-bespoke-marp-osc="next"]');
-const prevBtn = document.querySelector('button[data-bespoke-marp-osc="prev"]');
+function handleDownloadClick() {
+  getDownloadBtn().addEventListener('click', function downloadHandler(e) {
+    const { records, notes } = fromStore.getStateSnapshot();
+    // const allRecs = records.map(({ noteId, data }, i) => ({
+    //   file: new File([data], `Slide-${noteId}-${i}`, { type: 'audio/webm' }),
+    // }));
+    notes.forEach(({ content }, nIdx) => {
+      // const blob = new Blob([data], { type: 'audio/webm' });
+      content.forEach((obj, oIdx) => {
+        var aEl = document.createElement('a');
+        // aEl.href = window.URL.createObjectURL(obj);
+        aEl.href = obj;
 
-[nextBtn, prevBtn].forEach((btn) => {
-  btn.addEventListener('click', (e) => {
-    if (!!e) {
-      dispatchCurrentSlideIndex();
-    }
-  });
-});
+        aEl.download = `Slide-${nIdx}-${oIdx}.webm`;
+        aEl.style.display = 'none';
+        document.body.appendChild(aEl);
 
-function dispatchCurrentSlideIndex() {
-  readBespokeCurrentSlideIndex().then(({ id }) => {
-    return fromStore.dispatch(setCurrentSlide({ id }));
+        aEl.click();
+
+        document.body.removeChild(aEl);
+      });
+    });
   });
 }

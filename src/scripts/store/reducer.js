@@ -34,13 +34,13 @@ export default (state, { action: { type }, payload }) => {
         currentSlide: payload.id,
       };
 
-    case actionTypes.startRecord:
+    case actionTypes.startRecording:
       return {
         ...state,
         recording: true,
       };
 
-    case actionTypes.stopRecord:
+    case actionTypes.stopRecording:
       return {
         ...state,
         recording: false,

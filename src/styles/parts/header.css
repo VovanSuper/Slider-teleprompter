@@ -10,12 +10,17 @@
   grid-row: 1;
   vertical-align: middle;
 }
+
+.header > a > img {
+  max-height: 100%;
+}
+
 .header > h1 {
   margin: 0;
 }
 
 #status_box {
-  vertical-align: middle;
+  padding: 1rem;
 }
 
 #status_box p {
@@ -25,6 +30,7 @@
   color: white;
   position: relative;
 }
+
 #status_box p::before {
   margin-right: 0.2rem;
   content: '';

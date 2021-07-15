@@ -1,3 +1,7 @@
+import fromStore from "../store/store.js";
+import { setCurrentSlide } from "../store/actions.js";
+
+
 const currentSlideLSSubKey = 'bespoke-marp-sync-';
 
 const getBespokeLSKey = () => {
@@ -22,3 +26,23 @@ export const readBespokeCurrentSlideIndex = () => {
 };
 
 export const getStatusBoxEl = () => document.querySelector('#status_box');
+
+// Opt in to slider buttons clicks events
+const nextBtn = document.querySelector('button[data-bespoke-marp-osc="next"]');
+const prevBtn = document.querySelector('button[data-bespoke-marp-osc="prev"]');
+
+export function optToSliderButtons() {
+  [nextBtn, prevBtn].forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      if (!!e) {
+        dispatchCurrentSlideIndex();
+      }
+    });
+  });
+}
+
+export function dispatchCurrentSlideIndex() {
+  readBespokeCurrentSlideIndex().then(({ id }) => {
+    return fromStore.dispatch(setCurrentSlide({ id }));
+  });
+}

@@ -12,7 +12,7 @@ const renderNote = (note, notesEl, rootEl) => {
 
   noteElHeader.classList.add('note-header');
   noteElContent.classList.add('note-content');
-  noteElHeader.innerHTML = note.title;
+  noteElHeader.innerHTML = `<h1>${note.title}</h1>`;
   noteEl.appendChild(noteElHeader);
   noteEl.appendChild(noteElContent);
   noteEl.classList.add('note');
@@ -31,13 +31,13 @@ const renderNotes = ({ notes }, rootEl) => {
 /**
  *
  * @param {HTMLElement} noteContentUl
- * @param {Array<Blob>} content
+ * @param {Array<Blob>} records
  */
-const addNoteContent = (noteContentUl, content) => {
-  content.forEach((stream) => {
+const addNoteContent = (noteContentUl, records) => {
+  records.forEach((stream) => {
     try {
       const audioEl = document.createElement('audio');
-      audioEl.setAttribute('controls', '');
+      audioEl.controls = true;
       try {
         audioEl.src = stream;
       } catch {

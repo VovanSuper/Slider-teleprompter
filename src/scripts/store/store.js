@@ -1,7 +1,7 @@
 import reducer from './reducer.js';
 
 class Store {
-  #_state = { notes: [], records: [], notesLength: 0, currentSlide: undefined, recording: false };
+  #_state = { notes: [], records: [], notesLength: 0, currentSlide: undefined, records: [], recording: false };
   #_subscribers = [];
   currentReducer;
 

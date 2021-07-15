@@ -11,6 +11,7 @@ body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 500;
+  background-color: #d8d8d8;
 }
 
 #root {
@@ -19,7 +20,7 @@ body {
   display: grid;
   gap: 1rem;
   grid-template-columns: 8fr 4fr;
-  grid-template-rows: 1fr 11fr;
+  grid-template-rows: 1fr 10fr 1fr;
   position: relative;
 }
 
@@ -28,12 +29,14 @@ body {
   grid-column: 1;
   width: 100%;
   height: 100%;
+  background: #ccc;
 }
 
 @media screen and (max-width: 600px) {
   #root {
     grid-template-columns: 12fr;
     grid-template-rows: 1fr 6fr 5fr;
+    gap: 0;
   }
   .container {
     grid-row: 2;
@@ -42,5 +45,10 @@ body {
   .notes {
     grid-row: 3;
     grid-column: span 3;
+  }
+
+  .btn-download {
+    grid-row: 4;
+    grid-column: 1;
   }
 }
