@@ -12,7 +12,7 @@ export default function () {
   dispatchCurrentSlideIndex();
   handleRecording();
   fromStore.subscribe(({ notesLength, notes, recording }) => {
-    getStatusBoxEl().innerHTML = !!recording ? `<p>Recording</P>` : '';
+    getStatusBoxEl().innerHTML = !!recording ? `<p>Recording</P>` : '<small style="color: #ccc; font-size: small;">Click `R` to record</small>';
     renderNotes({ notes }, rootEl);
   });
 }
