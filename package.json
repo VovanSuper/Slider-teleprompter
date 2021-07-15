@@ -24,8 +24,10 @@
     "url": "https://github.com/VovanSuper"
   },
   "description": "Vanilla-js (no external dependencies, except of @marp-team/marp which uses Bespoke.js) simple slideshow and audio-clips recorder",
-  "main": "index.js",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
     "start": "npm run lite",
     "deck": "marp --no-stdin slides/slide1.md -o dist/index.html",
     "lite": "lite-server"
@@ -33,6 +35,7 @@
   "license": "ISC",
   "devDependencies": {
     "@marp-team/marp-cli": "^1.1.1",
-    "lite-server": "^2.6.1"
+    "lite-server": "^2.6.1",
+    "vite": "^2.4.2"
   }
 }

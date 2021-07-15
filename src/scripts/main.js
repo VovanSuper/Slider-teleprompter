@@ -3,6 +3,8 @@ import { renderNotes } from './helpers/notes.js';
 import handleRecording from './helpers/recorder.js';
 import { optToSliderButtons, getStatusBoxEl, dispatchCurrentSlideIndex } from './helpers/utils.js';
 
+import('./bespoke_generated.js');
+
 const rootEl = document.getElementById('root');
 
 /**
