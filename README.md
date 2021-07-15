@@ -7,5 +7,7 @@
 
 **Vanilla-js (with no external dependencies) simple slideshow (uses Marp app) and audio-clips recorder**
 
-Shows generated slides; Click 'R' to start / stop recording audio, once any audio clip created, click 'Save All' button to save all the audio files to disk .. 
+Shows generated slides;
+
+Click 'R' to start / stop recording audio, once any audio clip created, click 'Save All' button to save all the audio files to disk ...
 
