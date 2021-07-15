@@ -7,7 +7,7 @@ export const actionTypes = {
   stopRecord: 'RECORDING/STOP_RECORDING',
 };
 
-export const addNote = ({ note } = { note: { title: '', content: '' } }) => ({ action: { type: actionTypes.addNote }, payload: { note } });
+export const addNote = ({ note }) => ({ action: { type: actionTypes.addNote }, payload: { note } });
 export const removeNote = ({ id }) => ({ action: { type: actionTypes.removeNote }, payload: { id } });
 export const addContentToNote = ({ id, content }) => ({ action: { type: actionTypes.addContentToNote }, payload: { id, content } });
 

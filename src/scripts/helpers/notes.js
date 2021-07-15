@@ -3,7 +3,7 @@ import createNoteCloserBtn from './closer-btn.js';
 
 const getNoteByIndex = (index) => document.querySelector(`.note[idx="${index}"]`);
 
-const renderNote = (note, notes, index, notesEl, rootEl) => {
+const renderNote = (note, notesEl, rootEl) => {
   let noteEl = document.createElement('section');
   let noteElHeader = document.createElement('header');
   let noteElContent = document.createElement('ul');
@@ -16,7 +16,7 @@ const renderNote = (note, notes, index, notesEl, rootEl) => {
   noteEl.appendChild(noteElHeader);
   noteEl.appendChild(noteElContent);
   noteEl.classList.add('note');
-  noteEl.setAttribute('idx', index);
+  noteEl.setAttribute('idx', note.id);
   createNoteCloserBtn(noteEl, rootEl);
   notesEl.appendChild(noteEl);
 };
@@ -25,7 +25,7 @@ const renderNotes = ({ notes }, rootEl) => {
   const notesEl = document.querySelector('.notes');
   console.log({ notes });
   clearNoteEls(notesEl);
-  notes.forEach((note, i) => renderNote(note, notes, i, notesEl, rootEl));
+  notes.forEach((note, i) => renderNote(note, notesEl, rootEl));
 };
 
 /**

@@ -15,9 +15,9 @@ export const readBespokeCurrentSlideIndex = () => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       const data = readLocalStorageBespokeData();
-      const currentSlideIndex = data['index'] || 0;
-      return resolve({ id: currentSlideIndex });
-    });
+      const id = data['index'] ? data['index'] + 1 : 1;
+      return resolve({ id });
+    }, 1);
   });
 };
 

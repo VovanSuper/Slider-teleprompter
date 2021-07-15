@@ -56,7 +56,7 @@ export class Recorder {
 
         const { currentSlide: id, notes, notesLength } = fromStore.getStateSnapshot();
 
-        if (!!!notesLength || !!!notes[id]) {
+        if (!!!notesLength || !!!notes.some((n) => n.id === id)) {
           fromStore.dispatch(addNote({ note: { title: `Slide ${id}`, id, content: [audioData] } }));
         } else {
           fromStore.dispatch(addContentToNote({ id, content: audioData }));
@@ -100,11 +100,7 @@ export class Recorder {
   }
 
   #_getSupportedMimes() {
-    let types = [
-      'audio/webm',
-      'audio/webm;codecs=opus',
-      'audio/ogg;codecs=opus',
-    ];
+    let types = ['audio/webm', 'audio/webm;codecs=opus', 'audio/ogg;codecs=opus'];
 
     for (let i in types) {
       console.log('Is ' + types[i] + ' supported? ' + (MediaRecorder.isTypeSupported(types[i]) ? 'Maybe!' : 'Nope :('));

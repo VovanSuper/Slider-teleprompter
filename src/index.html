@@ -8,12 +8,14 @@
   <title>Slider Teleprompter</title>
   <link rel="stylesheet" href="styles/bespoke_generated.css">
   <link rel="stylesheet" href="styles/style.css">
+  <link rel="shortcut icon" href="teleprompter.svg">
 </head>
 
 <body>
   <div id="root">
     <header class="header">
-      <h1>Deck of Slides</h1>
+      <img src="teleprompter.svg" alt="logo" />
+      <h1>Slider Teleprompter</h1>
       <span id="status_box">Recording</span>
     </header>
     <main class="container">
@@ -61,10 +63,7 @@
     <aside class="notes"></aside>
   </div>
   <script src="scripts/bespoke_generated.js"></script>
-  <!-- <script src="scripts/main.js"></script> -->
   <script type="module">
-    // import main from '/scripts/main.js';
-    // main();
     import('/scripts/main.js').then(mod => mod.default())
   </script>
 </body>

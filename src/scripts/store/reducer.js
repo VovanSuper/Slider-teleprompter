@@ -17,7 +17,11 @@ export default (state, { action: { type }, payload }) => {
       };
 
     case actionTypes.addContentToNote:
-      const modNote = { ...state.notes[payload.id], content: state.notes[payload.id].content.concat(payload.content) };
+      const newContent = state.notes.filter((n) => n.id == payload.id)[0].content.concat(payload.content);
+      const modNote = {
+        ...state.notes.filter((n) => n.id === payload.id)[0],
+        content: newContent,
+      };
       const newNotes = state.notes.map((note) => (note.id === payload.id ? modNote : note));
       return {
         ...state,
