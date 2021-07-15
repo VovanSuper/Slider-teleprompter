@@ -8,15 +8,10 @@ export default defineConfig({
     outDir: join(__dirname, 'dist'),
     assetsDir: 'public',
     manifest: true,
-    minify: 'esbuild',
+    minify: 'terser',
     polyfillDynamicImport: true,
     sourcemap: 'inline',
     target: ['es2015', 'es2020'],
     write: true,
-    watch: {
-      chokidar: {
-        cwd: join(__dirname, 'src'),
-      },
-    },
   },
 });
