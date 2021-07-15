@@ -1,0 +1,76 @@
+.modal-container {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  font-family: sans-serif;
+}
+
+.modal-overlay {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(22, 22, 22, 0.4);
+}
+
+.modal-dialog {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: lightcoral;
+  min-width: 50%;
+  min-height: 20rem;
+  margin: auto;
+  top: 50%;
+  transform: translateY(-50%);
+  max-height: 50%;
+  max-width: 80%;
+}
+
+.dialog-caption {
+  font-size: xx-large;
+  margin: auto;
+}
+
+.modal-btn {
+  border: 1px solid rgba(22, 22, 22, 0.4);
+  border-radius: 0.5rem;
+  box-shadow: rgba(36, 40, 41, 0.5) 1px .1rem .1rem;
+  display: block;
+  margin: 1rem;
+  padding: 1rem 2rem;
+  position: absolute;
+  bottom: 1rem;
+  min-width: 5rem;
+}
+.modal-btn--ok {
+  background: green;
+  left: 2rem;
+}
+.modal-btn--cancel {
+  background: red;
+  right: 2rem;
+}
+
+.btn-close {
+  border-radius: 50%;
+  border: none;
+  color: white;
+  font-size: xx-large;
+  background: red !important;
+  display: grid;
+  place-content: center;
+  position: absolute;
+  top: -1rem;
+  right: -1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+}

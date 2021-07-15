@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slider Teleprompter</title>
+  <link rel="stylesheet" href="styles/bespoke_generated.css">
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+
+<body>
+  <div id="root">
+    <header class="header">
+      <h1>Deck of Slides</h1>
+      <span id="status_box">Recording</span>
+    </header>
+    <main class="container">
+
+      <div class="bespoke-marp-osc"><button data-bespoke-marp-osc="prev" tabindex="-1" title="Previous slide">Previous
+          slide</button><span data-bespoke-marp-osc="page"></span><button data-bespoke-marp-osc="next" tabindex="-1"
+          title="Next slide">Next slide</button><button data-bespoke-marp-osc="fullscreen" tabindex="-1"
+          title="Toggle fullscreen (f)">Toggle fullscreen</button><button data-bespoke-marp-osc="presenter"
+          tabindex="-1" title="Open presenter view (p)">Open presenter view</button></div>
+      <div id="p"><svg data-marpit-svg="" viewBox="0 0 1280 720">
+          <foreignObject width="1280" height="720">
+            <section id="1" data-background-color="#c2a3cc" data-class="slide" data-header="Hello from the Suppa Slider"
+              data-theme="uncover" class="slide"
+              style="--background-color:#c2a3cc;--class:slide;--header:Hello from the Suppa Slider;--theme:uncover;background-color:#c2a3cc;background-image:none;">
+              <header>Hello from the Suppa Slider</header>
+
+              <h2>Slide One</h2>
+              <p><strong>the slide brief definition goes here</strong></p>
+            </section>
+          </foreignObject>
+        </svg><svg data-marpit-svg="" viewBox="0 0 1280 720">
+          <foreignObject width="1280" height="720">
+            <section id="2" data-background-color="#c2a3cc" data-class="slide" data-header="Hello from the Suppa Slider"
+              data-theme="uncover" class="slide"
+              style="--background-color:#c2a3cc;--class:slide;--header:Hello from the Suppa Slider;--theme:uncover;background-color:#c2a3cc;background-image:none;">
+              <header>Hello from the Suppa Slider</header>
+              <h2>Slide Two</h2>
+              <p><strong>the slide brief definition goes here</strong></p>
+            </section>
+          </foreignObject>
+        </svg><svg data-marpit-svg="" viewBox="0 0 1280 720">
+          <foreignObject width="1280" height="720">
+            <section id="3" data-background-color="#c2a3cc" data-class="slide" data-header="Hello from the Suppa Slider"
+              data-theme="uncover" class="slide"
+              style="--background-color:#c2a3cc;--class:slide;--header:Hello from the Suppa Slider;--theme:uncover;background-color:#c2a3cc;background-image:none;">
+              <header>Hello from the Suppa Slider</header>
+              <h2>Slide Three</h2>
+              <p><strong>the slide brief definition goes here</strong></p>
+            </section>
+          </foreignObject>
+        </svg></div>
+
+    </main>
+
+    <aside class="notes"></aside>
+  </div>
+  <script src="scripts/bespoke_generated.js"></script>
+  <!-- <script src="scripts/main.js"></script> -->
+  <script type="module">
+    // import main from '/scripts/main.js';
+    // main();
+    import('/scripts/main.js').then(mod => mod.default())
+  </script>
+</body>
+
+</html>
