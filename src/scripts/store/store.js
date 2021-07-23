@@ -1,13 +1,14 @@
 import reducer from './reducer.js';
 
 class Store {
-  #_state = { notes: [], records: [], notesLength: 0, currentSlide: undefined, records: [], recording: false };
+  #_state = { currentSlide: 1, clips: [], recording: false, timer: undefined };
+  #_lastActionInvoked = null;
   #_subscribers = [];
   currentReducer;
 
-  constructor(reducer, iniNotes = []) {
+  constructor(reducer, iniClips = []) {
     this.currentReducer = reducer;
-    this.#_setState({ ...this.#_state, notes: iniNotes });
+    this.#_setState({ ...this.#_state, clips: iniClips });
   }
 
   subscribe(cb) {
@@ -22,19 +23,21 @@ class Store {
   dispatch(actionParams) {
     const newState = this.currentReducer(this.getStateSnapshot(), actionParams);
     // if (this.#_sameState(newState)) return;
+    this.#_lastActionInvoked = actionParams.action;
     this.#_setState(newState);
     !!this.#_subscribers.length && this.#_subscribers.forEach((_sub) => _sub(this.getStateSnapshot()));
   }
 
-  #logState() {
-    console.group('fromState');
-    console.info('LogState : ', this.#_state);
-    console.groupEnd('fromState');
-  }
-
   #_setState(newState) {
     this.#_state = { ...newState };
-    this.#logState();
+    this.#_logState();
+  }
+
+  #_logState() {
+    console.group('fromState');
+    console.info('Last Action : ', this.#_lastActionInvoked);
+    console.info('State : ', this.#_state);
+    console.groupEnd('fromState');
   }
 
   #_sameState(newState) {
@@ -46,10 +49,10 @@ class Store {
   }
 }
 
-let NotesStore = new Store(reducer);
+let recordsStore = new Store(reducer);
 
 export default {
-  dispatch: (actionParams) => NotesStore.dispatch(actionParams),
-  subscribe: (cb) => NotesStore.subscribe(cb),
-  getStateSnapshot: () => NotesStore.getStateSnapshot(),
+  dispatch: (actionParams) => recordsStore.dispatch(actionParams),
+  subscribe: (cb) => recordsStore.subscribe(cb),
+  getStateSnapshot: () => recordsStore.getStateSnapshot(),
 };

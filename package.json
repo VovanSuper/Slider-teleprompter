@@ -1,6 +1,13 @@
 {
   "name": "slider-teleprompter",
   "version": "0.0.1",
+  "description": "Vanilla-js (no external dependencies, except of @marp-team/marp which uses Bespoke.js) simple slideshow and audio-clips recorder",
+  "license": "MIT",
+  "author": {
+    "email": "vovansuper@mail.ru",
+    "name": "Vladimir Ovsyukov",
+    "url": "https://github.com/VovanSuper"
+  },
   "keywords": [
     "Slides",
     "Teleprompter",
@@ -13,24 +20,12 @@
   "engines": {
     "node": ">=12"
   },
-  "licenses": [
-    {
-      "type": "MIT"
-    }
-  ],
-  "author": {
-    "email": "vovansuper@mail.ru",
-    "name": "Vladimir Ovsyukov",
-    "url": "https://github.com/VovanSuper"
-  },
-  "description": "Vanilla-js (no external dependencies, except of @marp-team/marp which uses Bespoke.js) simple slideshow and audio-clips recorder",
   "main": "index.js",
   "scripts": {
     "start": "npm run lite",
     "deck": "marp --no-stdin slides/slide1.md -o dist/index.html",
-    "lite": "lite-server"
+    "lite": "npx lite-server"
   },
-  "license": "ISC",
   "devDependencies": {
     "@marp-team/marp-cli": "^1.1.1",
     "lite-server": "^2.6.1"

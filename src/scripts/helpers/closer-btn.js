@@ -4,7 +4,7 @@ import { renderModal } from './modal.js';
 
 export default function createNoteCloserBtn(noteEl, rootEl) {
   const currNotes = fromStore.getStateSnapshot();
-  console.log('Notes before (fromStore) :: ', currNotes);
+  // console.log('Notes before (fromStore) :: ', currNotes);
   const closer = document.createElement('button');
   closer.classList.add('btn-close');
   closer.innerHTML = '&Cross;';
