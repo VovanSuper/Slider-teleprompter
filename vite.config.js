@@ -8,10 +8,11 @@ export default defineConfig({
     outDir: join(__dirname, 'dist'),
     assetsDir: 'public',
     manifest: true,
-    minify: false,
+    minify: 'esbuild',
     polyfillDynamicImport: true,
     sourcemap: 'inline',
     target: ['es2015', 'es2020'],
     write: true,
+    cssCodeSplit: true,
   },
 });
