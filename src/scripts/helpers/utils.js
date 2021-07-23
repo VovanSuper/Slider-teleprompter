@@ -1,6 +1,5 @@
-import fromStore from "../store/store.js";
-import { setCurrentSlide } from "../store/actions.js";
-
+import fromStore from '../store/store.js';
+import { setTimer } from '../store/actions.js';
 
 const currentSlideLSSubKey = 'bespoke-marp-sync-';
 
@@ -13,7 +12,7 @@ const getBespokeLSKey = () => {
   }
 };
 
-export const readLocalStorageBespokeData = () => JSON.parse(localStorage.getItem(getBespokeLSKey()));
+const readLocalStorageBespokeData = () => JSON.parse(localStorage.getItem(getBespokeLSKey()));
 
 export const readBespokeCurrentSlideIndex = () => {
   return new Promise((resolve, reject) => {
@@ -27,22 +26,27 @@ export const readBespokeCurrentSlideIndex = () => {
 
 export const getStatusBoxEl = () => document.querySelector('#status_box');
 
-// Opt in to slider buttons clicks events
-const nextBtn = document.querySelector('button[data-bespoke-marp-osc="next"]');
-const prevBtn = document.querySelector('button[data-bespoke-marp-osc="prev"]');
+class SimpleTimer {
+  startTime = undefined;
 
-export function optToSliderButtons() {
-  [nextBtn, prevBtn].forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      if (!!e) {
-        dispatchCurrentSlideIndex();
-      }
-    });
-  });
+  constructor() {
+    this.#_start();
+  }
+
+  #_start() {
+    this.startTime = new Date().getTime();
+  }
+
+  getDiffMs() {
+    return new Date().getTime() - this.startTime;
+  }
 }
 
-export function dispatchCurrentSlideIndex() {
-  readBespokeCurrentSlideIndex().then(({ id }) => {
-    return fromStore.dispatch(setCurrentSlide({ id }));
-  });
-}
+const createTimer = () => new SimpleTimer();
+
+export const timeFuncs = {
+  setStoreTimer: (isNewUp) => {
+    fromStore.dispatch(setTimer({ timer: isNewUp ? createTimer() : null }));
+  },
+  getElapsedTime: () => fromStore.getStateSnapshot().timer?.getDiffMs() || null,
+};

@@ -1,7 +1,8 @@
 import fromStore from './store/store.js';
-import { renderNotes } from './helpers/notes.js';
+import { renderClips } from './helpers/notes.js';
 import handleRecording from './helpers/recorder.js';
-import { optToSliderButtons, getStatusBoxEl, dispatchCurrentSlideIndex } from './helpers/utils.js';
+import { getStatusBoxEl } from './helpers/utils.js';
+import { optToSliderButtons, dispatchCurrentSlideIndex } from './helpers/slides.js';
 
 import('./bespoke_generated.js');
 
@@ -18,34 +19,58 @@ export default function () {
   optToSliderButtons();
   handleRecording();
   handleDownloadClick();
-  fromStore.subscribe(({ notesLength, notes, recording }) => {
+  fromStore.subscribe(({ clips, recording }) => {
     getStatusBoxEl().innerHTML = !!recording ? `<p>Recording</P>` : '<small style="color: #ccc; font-size: small;">Click `R` to record</small>';
-    renderNotes({ notes }, rootEl);
-    getDownloadBtn().style.opacity = !!notesLength ? 1 : 0;
+    renderClips({ clips }, rootEl);
+    getDownloadBtn().style.opacity = !!clips?.length ? 1 : 0;
   });
 }
 
 function handleDownloadClick() {
   getDownloadBtn().addEventListener('click', function downloadHandler(e) {
-    const { records, notes } = fromStore.getStateSnapshot();
-    // const allRecs = records.map(({ noteId, data }, i) => ({
+    const { clips } = fromStore.getStateSnapshot();
+    // const allRecs = clips.map(({ noteId, data }, i) => ({
     //   file: new File([data], `Slide-${noteId}-${i}`, { type: 'audio/webm' }),
     // }));
-    notes.forEach(({ content }, nIdx) => {
-      // const blob = new Blob([data], { type: 'audio/webm' });
-      content.forEach((obj, oIdx) => {
-        var aEl = document.createElement('a');
-        // aEl.href = window.URL.createObjectURL(obj);
-        aEl.href = obj;
+    let meta = { clips: [] };
 
-        aEl.download = `Slide-${nIdx}-${oIdx}.webm`;
+    clips.forEach(({ id, slides, data }) => {
+      let reader = new FileReader();
+      reader.readAsDataURL(data);
+      reader.onloadend = (_e) => {
+        const audioBas64 = reader.result.toString();
+        meta = {
+          clips: meta.clips.concat({
+            id,
+            slides,
+            audio: audioBas64,
+          }),
+        };
+        const aEl = document.createElement('a');
+        aEl.href = window.URL.createObjectURL(data);
+
+        aEl.download = `Clip-${id}.webm`;
         aEl.style.display = 'none';
         document.body.appendChild(aEl);
 
         aEl.click();
 
         document.body.removeChild(aEl);
-      });
+      };
     });
+
+    setTimeout(() => {
+      const aEl = document.createElement('a');
+      const filename = `media-metadata.json`;
+      aEl.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(meta)));
+      aEl.setAttribute('download', filename);
+
+      aEl.style.display = 'none';
+      document.body.appendChild(aEl);
+
+      aEl.click();
+
+      document.body.removeChild(aEl);
+    }, 100);
   });
 }

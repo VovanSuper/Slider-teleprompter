@@ -10,12 +10,18 @@
 }
 
 .note {
+  display: grid;
+  grid-template-rows: 3rem minmax(5rem, auto) 2rem;
   background: pink;
   position: relative;
   border: 1px solid #f7f7f7;
   border-radius: 0.4rem;
   margin: 1.2rem;
-  padding: 1rem 1rem 1rem 2rem;
+  padding: 1rem;
+}
+
+.note > .note-header {
+  padding-bottom: 1rem;
 }
 
 .notes .note-content {
@@ -31,10 +37,10 @@
   max-width: 100%;
 }
 
-.notes .note-content > li::marker {
+/* .notes .note-content > li::marker {
   font-size: 500%;
   color: lightsalmon;
-}
+} */
 
 .btn-download {
   grid-row: 3;
@@ -52,4 +58,16 @@
   padding: 1rem 2rem;
   opacity: 0;
   transition: all 1s ease;
+}
+
+.note-footer {
+  display: block;
+  max-width: 100%;
+  position: relative;
+}
+
+.note-footer > audio {
+  width: 100%;
+  max-width: 100%;
+  height: 2rem;
 }

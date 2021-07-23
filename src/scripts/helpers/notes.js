@@ -1,60 +1,68 @@
-import fromStore from '../store/store.js';
 import createNoteCloserBtn from './closer-btn.js';
 
 const getNoteByIndex = (index) => document.querySelector(`.note[idx="${index}"]`);
 
-const renderNote = (note, notesEl, rootEl) => {
+const renderNote = (clip, notesEl, rootEl) => {
   let noteEl = document.createElement('section');
   let noteElHeader = document.createElement('header');
+  let noteElFooter = document.createElement('footer');
   let noteElContent = document.createElement('ul');
-  if (!!note.content) addNoteContent(noteElContent, note.content);
+  if (!!clip.slides?.length) addNoteSlidesList(noteElContent, clip);
   // noteElContent.innerHTML = content;
+  clip.data && addAudioElementToNote(noteElFooter, clip.data);
 
   noteElHeader.classList.add('note-header');
+  noteElFooter.classList.add('note-footer');
   noteElContent.classList.add('note-content');
-  noteElHeader.innerHTML = `<h1>${note.title}</h1>`;
+  noteElHeader.innerHTML = `<h1>Clip ${clip.id}</h1>`;
   noteEl.appendChild(noteElHeader);
   noteEl.appendChild(noteElContent);
+  noteEl.appendChild(noteElFooter);
   noteEl.classList.add('note');
-  noteEl.setAttribute('idx', note.id);
+  noteEl.setAttribute('idx', clip.id);
   createNoteCloserBtn(noteEl, rootEl);
   notesEl.appendChild(noteEl);
 };
 
-const renderNotes = ({ notes }, rootEl) => {
+const renderClips = ({ clips }, rootEl) => {
   const notesEl = document.querySelector('.notes');
-  console.log({ notes });
   clearNoteEls(notesEl);
-  notes.forEach((note, i) => renderNote(note, notesEl, rootEl));
+  clips.forEach((clip, i) => renderNote(clip, notesEl, rootEl));
 };
 
-/**
- *
- * @param {HTMLElement} noteContentUl
- * @param {Array<Blob>} records
- */
-const addNoteContent = (noteContentUl, records) => {
-  records.forEach((stream) => {
-    try {
-      const audioEl = document.createElement('audio');
-      audioEl.controls = true;
-      try {
-        audioEl.src = stream;
-      } catch {
-        audioEl.srcObject = stream;
-      }
+const addNoteSlidesList = (noteContentUl, clip) => {
+  const { slides } = clip || {};
 
+  try {
+    slides.forEach((slide) => {
       const liEl = document.createElement('li');
-      liEl.appendChild(audioEl);
+      const liSpan = document.createElement('span');
+      liSpan.innerText = `Slide ${slide.id}`;
+      liEl.appendChild(liSpan);
       noteContentUl.appendChild(liEl);
-    } catch (e) {
-      console.error('Error appending Audio Element to parent');
-      console.error(e);
-    }
-  });
+    });
+  } catch (e) {
+    console.error('Error appending Slides names / Audio Element to parent');
+    console.error(e);
+  }
 };
+
+const addAudioElementToNote = (noteFooterEl, blob) => {
+  if (!!blob) {
+    const audio = window.URL.createObjectURL(blob);
+    const audioEl = document.createElement('audio');
+    audioEl.controls = true;
+    try {
+      audioEl.src = audio;
+    } catch {
+      audioEl.srcObject = audio;
+    }
+    noteFooterEl.appendChild(audioEl);
+  }
+};
+
 const clearNoteEls = (notesEl) => {
   !!notesEl.children.length && Array.from(notesEl.children).forEach((child) => notesEl.removeChild(child));
 };
 
-export { getNoteByIndex, renderNote, renderNotes, addNoteContent };
+export { getNoteByIndex, renderNote, renderClips };

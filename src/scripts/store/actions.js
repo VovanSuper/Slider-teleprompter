@@ -1,19 +1,21 @@
 export const actionTypes = {
-  addNote: 'NOTE/ADD_NOTE',
-  addContentToNote: 'NOTE/ADD_CONTENT_NOTE',
-  removeNote: 'NOTE/REMOVE_NOTE',
   setCurrentSlide: 'SLIDE/SET_SLIDE',
   startRecording: 'RECORDING/START_RECORDING',
   stopRecording: 'RECORDING/STOP_RECORDING',
   addRecord: 'RECORDING/STOP_RECORDING',
+  setTimer: 'TIMER/SET_TIMER',
+  getElapsedTimer: 'TIMER/GET_ELAPSED_TIMER',
+
+  removeNote: 'NOTE/REMOVE_NOTE',
 };
 
-export const addNote = ({ note }) => ({ action: { type: actionTypes.addNote }, payload: { note } });
-export const removeNote = ({ id }) => ({ action: { type: actionTypes.removeNote }, payload: { id } });
-export const addContentToNote = ({ id, content }) => ({ action: { type: actionTypes.addContentToNote }, payload: { id, content } });
-
-export const setCurrentSlide = ({ id }) => ({ action: { type: actionTypes.setCurrentSlide }, payload: { id } });
+export const setCurrentSlide = ({ id, time = null }) => ({ action: { type: actionTypes.setCurrentSlide }, payload: { id, time } });
 
 export const startRecording = () => ({ action: { type: actionTypes.startRecording } });
-export const stopRecording = ({ noteId, data }) => ({ action: { type: actionTypes.stopRecording }, payload: { noteId, data } });
-export const addRecord = ({ id, data }) => ({ action: { type: actionTypes.addRecord }, payload: { noteId, data } });
+export const stopRecording = ({ data }) => ({ action: { type: actionTypes.stopRecording }, payload: { data } });
+
+export const setTimer = ({ timer }) => ({ action: { type: actionTypes.setTimer }, payload: { timer } });
+export const getElapsedTimer = () => ({ action: { type: actionTypes.getElapsedTimer } });
+
+
+export const removeNote = ({ id }) => ({ action: { type: actionTypes.removeNote }, payload: { id } });

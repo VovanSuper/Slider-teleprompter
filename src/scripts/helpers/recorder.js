@@ -1,6 +1,9 @@
 import fromStore from '../store/store.js';
-import { startRecording, stopRecording, addNote, addContentToNote } from '../store/actions.js';
+import { startRecording, stopRecording } from '../store/actions.js';
 import { getStatusBoxEl } from './utils.js';
+import { timeFuncs } from '../helpers/utils.js';
+
+const { setStoreTimer } = timeFuncs;
 
 export default function () {
   document.addEventListener('keypress', (e) => {
@@ -17,6 +20,9 @@ function handleRecording() {
   if (recording) {
     if (!!recorder) {
       recorder.stop();
+      recorder = null;
+    } else {
+      console.log('Error: NO recorder !');
     }
   } else {
     recorder = new Recorder();
@@ -44,26 +50,19 @@ export class Recorder {
     // this.#_getSupportedMimes();
     try {
       fromStore.dispatch(startRecording());
+      setStoreTimer(true);
       this.stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
       const tracks = this.stream.getAudioTracks();
-      console.log('Tracks :: ', tracks);
-      console.log('Capabilities :: ', tracks[0].getCapabilities());
+      // console.log('Tracks :: ', tracks);
+      // console.log('Capabilities :: ', tracks[0].getCapabilities());
 
       this.mediaRecorder = new MediaRecorder(this.stream, { mimeType: 'audio/webm;codecs=opus' });
       this.mediaRecorder.onstart = (e) => console.log('Started recording');
       this.mediaRecorder.onstop = (e) => {
         const audioData = this.#_setAudio();
-
-        const { currentSlide: id, notes, notesLength } = fromStore.getStateSnapshot();
-
-        if (!!!notesLength || !!!notes.some((n) => n.id === id)) {
-          fromStore.dispatch(addNote({ note: { title: `Slide ${id}`, id, content: [audioData] } }));
-        } else {
-          fromStore.dispatch(addContentToNote({ id, content: audioData }));
-        }
       };
       this.mediaRecorder.ondataavailable = (e) => {
-        console.log('Data AVAILABLE::: ', e.data);
+        // console.log('Data AVAILABLE::: ', e.data);
 
         if (e.data.size > 0) {
           this.chunks.push(e.data);
@@ -101,7 +100,6 @@ export class Recorder {
 
   #_getSupportedMimes() {
     let types = ['audio/webm', 'audio/webm;codecs=opus', 'audio/ogg;codecs=opus'];
-
     for (let i in types) {
       console.log('Is ' + types[i] + ' supported? ' + (MediaRecorder.isTypeSupported(types[i]) ? 'Maybe!' : 'Nope :('));
     }
@@ -109,15 +107,8 @@ export class Recorder {
 
   #_setAudio() {
     const blob = new Blob(this.chunks, { type: 'audio/webm;codecs=opus' });
-    fromStore.dispatch(
-      stopRecording({
-        noteId: fromStore.getStateSnapshot().currentSlide,
-        data: blob,
-      })
-    );
+    fromStore.dispatch(stopRecording({ data: blob }));
     this.chunks = [];
-    const audioURL = window.URL.createObjectURL(blob);
-    return audioURL;
   }
 
   #_errorMsg(msg, error) {
