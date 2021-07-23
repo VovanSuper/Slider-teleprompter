@@ -23,6 +23,8 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run lite",
+    "build": "vite build",
+    "serve": "vite preview",
     "deck": "marp --no-stdin slides/slide1.md -o dist/index.html",
     "lite": "npx lite-server"
   },

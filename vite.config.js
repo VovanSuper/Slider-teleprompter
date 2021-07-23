@@ -8,7 +8,7 @@ export default defineConfig({
     outDir: join(__dirname, 'dist'),
     assetsDir: 'public',
     manifest: true,
-    minify: 'terser',
+    minify: false,
     polyfillDynamicImport: true,
     sourcemap: 'inline',
     target: ['es2015', 'es2020'],
