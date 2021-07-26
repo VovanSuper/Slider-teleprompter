@@ -21,12 +21,15 @@ export default function () {
     getStatusBoxEl().innerHTML = !!recording ? `<p>Recording</P>` : '<small style="color: #ccc; font-size: small;">Click `R` to record</small>';
     renderClips({ clips }, rootEl);
     getDownloadBtn().style.opacity = !!clips?.length ? 1 : 0;
+    if (recording) getDownloadBtn().classList.add('btn-recording')
+    else getDownloadBtn().classList.remove('btn-recording')
   });
 }
 
 function handleDownloadClick() {
   getDownloadBtn().addEventListener('click', function downloadHandler(e) {
-    const { clips } = fromStore.getStateSnapshot();
+    const { clips, recording } = fromStore.getStateSnapshot();
+    if (recording) return;
     // const allRecs = clips.map(({ noteId, data }, i) => ({
     //   file: new File([data], `Slide-${noteId}-${i}`, { type: 'audio/webm' }),
     // }));

@@ -60,6 +60,11 @@
   transition: all 1s ease;
 }
 
+.btn-recording {
+  background-color: #e41c4e3b;
+  columns: #ccc;
+}
+
 .note-footer {
   display: block;
   max-width: 100%;
