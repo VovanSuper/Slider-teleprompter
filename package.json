@@ -1,6 +1,6 @@
 {
   "name": "slider-teleprompter",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Vanilla-js (no external dependencies, except of @marp-team/marp which uses Bespoke.js) simple slideshow and audio-clips recorder",
   "license": "MIT",
   "author": {
@@ -20,14 +20,13 @@
   "engines": {
     "node": ">=12"
   },
-  "main": "index.js",
   "scripts": {
     "start": "npm run lite",
     "deck": "marp --no-stdin slides/slide1.md -o dist/index.html",
     "lite": "npx lite-server"
   },
   "devDependencies": {
-    "@marp-team/marp-cli": "^1.1.1",
+    "@marp-team/marp-cli": "^1.2.0",
     "lite-server": "^2.6.1"
   }
 }
