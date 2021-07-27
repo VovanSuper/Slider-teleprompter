@@ -57,14 +57,23 @@ function handleDownloadClick() {
         },
       ],
     };
+    let dirHandler = await window.showDirectoryPicker();
+    // console.log({ name: dirHandler.name });
+    // console.log({ entries: dirHandler.entries().map((v) => v) });
+    // console.log({ keys: dirHandler.keys().map((v) => v) });
+    // console.log({ slidesResolve: await dirHandler.resolve('Slides') });
+
+    // console.log(fileHandle);
+    // return;
 
     await Promise.all(
       allRecs.map(async ({ file, slides, id }) => {
-        let fileHandle = await window.showSaveFilePicker(audiofileOpts);
+        // let fileHandle = await window.showSaveFilePicker(audiofileOpts);
 
+        let fileHandle = await dirHandler.getFileHandle(`Slide-${id}.weba`, { create: true });
         const writable = await fileHandle.createWritable();
 
-        await writable.write(file, fileHandle.name, file.type);
+        await writable.write(file, fileHandle.name + '.weba', file.type);
         await writable.close();
 
         meta = {
@@ -78,10 +87,11 @@ function handleDownloadClick() {
       })
     )
       .then(async () => {
-        let fileHandle = await window.showSaveFilePicker(metadataOpts);
+        // let fileHandle = await window.showSaveFilePicker(metadataOpts);
 
+        const fileHandle = await dirHandler.getFileHandle('clips-metadata.json', { create: true });;
         const writable = await fileHandle.createWritable();
-        await writable.write(JSON.stringify(meta), fileHandle.name + '.json' || 'clips-metadata.json');
+        await writable.write(JSON.stringify(meta), 'clips-metadata.json');
         await writable.close();
       })
       .catch((e) => {
