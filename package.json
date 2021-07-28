@@ -22,11 +22,21 @@
   },
   "scripts": {
     "start": "npm run lite",
-    "deck": "marp --no-stdin slides/slide1.md -o dist/index.html",
+    "deck:marp": "marp --no-stdin slides/slide1.md -o dist/index.html",
+    "deck:build": "node ./maker",
     "lite": "npx lite-server"
   },
   "devDependencies": {
+    "@marp-team/marpit": "^2.1.0",
+    "bespoke": "^1.1.0",
+    "bespoke-markdownit": "^1.2.0",
+    "cheerio": "^1.0.0-rc.10",
+    "markdown-it": "^12.1.0",
+    "node-html-parser": "^4.1.2",
     "@marp-team/marp-cli": "^1.2.0",
-    "lite-server": "^2.6.1"
+    "@types/cheerio": "^0.22.30",
+    "@types/markdown-it": "^12.0.3",
+    "lite-server": "^2.6.1",
+    "markdown-it-imsize": "^2.0.1"
   }
 }
