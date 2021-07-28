@@ -4,6 +4,8 @@ import { setTimer } from '../store/actions.js';
 const MARP_BESPOKE_KEY_FROM_HISOTRY = window.history?.state?.marpBespokeSyncKey;
 const currentSlideLSSubKey = !!MARP_BESPOKE_KEY_FROM_HISOTRY ? `bespoke-marp-sync-${MARP_BESPOKE_KEY_FROM_HISOTRY}` : 'bespoke-marp-sync-';
 
+// const getCurrentBespokeIndex = () => bespoke.from('#p').slide();
+
 const getBespokeLSKey = () => {
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
@@ -19,7 +21,9 @@ export const readBespokeCurrentSlideIndex = () => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       const data = readLocalStorageBespokeData();
-      const id = !!data && !!data['index'] ? data['index'] + 1 : 1;
+      const id = !!data && !!data['index'] ? parseInt(data['index']) + 1 : 1;
+      // const id = parseInt(getCurrentBespokeIndex()) + 1 || 1;
+      console.log({ id });
       return resolve({ id });
     }, 1);
   });
