@@ -1,6 +1,6 @@
 {
   "name": "slider-teleprompter",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Vanilla-js (no external dependencies, except of @marp-team/marp which uses Bespoke.js) simple slideshow and audio-clips recorder",
   "license": "MIT",
   "author": {
