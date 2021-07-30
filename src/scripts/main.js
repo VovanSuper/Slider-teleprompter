@@ -6,9 +6,6 @@ import { optToSliderButtons, dispatchCurrentSlideIndex } from './helpers/slides.
 
 const rootEl = document.getElementById('root');
 
-let ini = false;
-let currSlide = undefined;
-
 /**
  *
  * @returns {HTMLButtonElement}
@@ -24,22 +21,12 @@ export default function () {
   fromStore.subscribe(({ clips, recording, currentSlide }) => {
     getStatusBoxEl().innerHTML = !!recording ? `<p>Recording</P>` : '<small style="color: #ccc; font-size: small;">Click `R` to record</small>';
     getDownloadBtn().style.opacity = !!clips?.length ? 1 : 0;
+    renderClips({ clips }, rootEl);
     if (recording) {
       getDownloadBtn().classList.add('btn-recording');
     } else {
       getDownloadBtn().classList.remove('btn-recording');
     }
-
-    if (!ini) {
-      renderClips({ clips }, rootEl);
-    } else {
-      if (currSlide !== currentSlide) {
-        renderClips({ clips }, rootEl);
-      }
-    }
-
-    ini = true;
-    currSlide = currentSlide;
   });
 }
 

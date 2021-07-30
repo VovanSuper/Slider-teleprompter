@@ -30,9 +30,14 @@ function optToSliderButtons() {
   );
 }
 
+let currSlideIdx = undefined;
+
 function dispatchCurrentSlideIndex() {
   readBespokeCurrentSlideIndex().then(({ id }) => {
-    return fromStore.dispatch(setCurrentSlide({ id, time: getElapsedTime() }));
+    if (!!!currSlideIdx || currSlideIdx !== id) {
+      fromStore.dispatch(setCurrentSlide({ id, time: getElapsedTime() }));
+    }
+    currSlideIdx = id;
   });
 }
 

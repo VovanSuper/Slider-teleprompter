@@ -1,8 +1,8 @@
 import fromStore from '../store/store.js';
 import { setTimer } from '../store/actions.js';
 
-const MARP_BESPOKE_KEY_FROM_HISOTRY = window.history?.state?.marpBespokeSyncKey;
-const currentSlideLSSubKey = !!MARP_BESPOKE_KEY_FROM_HISOTRY ? `bespoke-marp-sync-${MARP_BESPOKE_KEY_FROM_HISOTRY}` : 'bespoke-marp-sync-';
+const MARP_BESPOKE_KEY_FROM_HISTORY = window.history?.state?.marpBespokeSyncKey;
+const currentSlideLSSubKey = !!MARP_BESPOKE_KEY_FROM_HISTORY ? `bespoke-marp-sync-${MARP_BESPOKE_KEY_FROM_HISTORY}` : 'bespoke-marp-sync-';
 
 // const getCurrentBespokeIndex = () => bespoke.from('#p').slide();
 
