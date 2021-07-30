@@ -8,7 +8,7 @@ const { hideBin } = require('yargs/helpers');
 
 const argv = yargs(hideBin(process.argv)).argv;
 
-console.log({ argv, slidesSrc: argv.slide });
+// console.log({ argv, slidesSrc: argv.slide });
 
 const { Element, Marpit } = require('@marp-team/marpit');
 const { marpCli } = require('@marp-team/marp-cli');
@@ -20,6 +20,11 @@ const cheerio = require('cheerio');
 // const bespokeMdIt = require('bespoke-markdownit');
 
 const slidesPath = 'slides';
+
+const sampleSvg = join(__dirname, slidesPath, '648_427234.svg');
+
+return console.log({ isREAD: fs.readFileSync(sampleSvg) });
+
 const assetsSrcPath = `${slidesPath}/assets/`;
 
 const srcPath = 'src';

@@ -10,6 +10,7 @@ export default defineConfig({
     manifest: true,
     minify: 'esbuild',
     polyfillDynamicImport: true,
+    assetsInlineLimit: 4194304,
     sourcemap: 'inline',
     target: ['es2015', 'es2020'],
     write: true,
