@@ -1,4 +1,4 @@
-![](assets/648_428148.svg)
+![](./assets/648_428148.svg)
 
 <!--
 Before we dive into Kubernetes, let's take the time to explore how the infrastructure has evolved.
@@ -8,7 +8,7 @@ Before we dive into Kubernetes, let's take the time to explore how the infrastru
 -->
 
 ---
-![](assets/648_428146.svg)
+![](./assets/648_428146.svg)
 
 <!--
 1/5
@@ -19,7 +19,7 @@ In the past few years. the industry has experienced a shift towards developing .
 -->
 
 ---
-![](assets/648_428143.svg)
+![](./assets/648_428143.svg)
 
 <!--
 2/5
@@ -30,7 +30,7 @@ In the past few years. the industry has experienced a shift towards developing .
 -->
 
 ---
-![](assets/648_428139.svg)
+![](./assets/648_428139.svg)
 
 <!--
 3/5
@@ -41,7 +41,7 @@ It comes as no surprise that more and more companies are breaking down their app
 -->
 
 ---
-![](assets/648_428130.svg)
+![](./assets/648_428130.svg)
 
 <!--
 5/5
@@ -56,7 +56,7 @@ As an example you might refactor a single app into 4 components:
 -->
 
 ---
-![](assets/648_428124.svg)
+![](./assets/648_428124.svg)
 
 <!--
 Apps that are smaller in scope are:
@@ -67,7 +67,7 @@ Apps that are smaller in scope are:
 -->
 
 ---
-![](assets/648_428118.svg)
+![](./assets/648_428118.svg)
 
 <!--
 2. Easier to iterate on — since adding features happens independently.
@@ -77,7 +77,7 @@ Apps that are smaller in scope are:
 -->
 
 ---
-![](assets/648_428112.svg)
+![](./assets/648_428112.svg)
 
 <!--
 3. Resilient — the overall service can still function despite one of the apps not being available.
@@ -87,7 +87,7 @@ Apps that are smaller in scope are:
 -->
 
 ---
-![](assets/648_428015.svg)
+![](./assets/648_428015.svg)
 
 <!--
 1/4
@@ -100,7 +100,7 @@ Developing services out of smaller components introduces a different challenge.
 -->
 
 ---
-![](assets/648_427889.svg)
+![](./assets/648_427889.svg)
 
 <!--
 2/4
@@ -111,7 +111,7 @@ Imagine being tasked with migrating a single app into a collection of component.
 -->
 
 ---
-![](assets/648_427771.svg)
+![](./assets/648_427771.svg)
 
 <!--
 3/4
@@ -122,7 +122,7 @@ When, for every application, you can refactor the same in a collection of four c
 -->
 
 ---
-![](assets/648_427234.svg)
+![](./assets/648_427234.svg)
 
 <!--
 4/4

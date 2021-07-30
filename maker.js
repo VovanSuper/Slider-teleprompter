@@ -21,10 +21,6 @@ const cheerio = require('cheerio');
 
 const slidesPath = 'slides';
 
-const sampleSvg = join(__dirname, slidesPath, '648_427234.svg');
-
-return console.log({ isREAD: fs.readFileSync(sampleSvg) });
-
 const assetsSrcPath = `${slidesPath}/assets/`;
 
 const srcPath = 'src';
