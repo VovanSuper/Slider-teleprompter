@@ -7,7 +7,7 @@ import { optToSliderButtons, dispatchCurrentSlideIndex } from './helpers/slides.
 const rootEl = document.getElementById('root');
 
 let ini = false;
-let currClips = [];
+let currSlide = undefined;
 
 /**
  *
@@ -21,7 +21,7 @@ export default function () {
   handleRecording();
   handleDownloadClick();
   navigator.permissions.query({ name: 'microphone' }).then((micAllowed) => micAllowed.state === 'granted');
-  fromStore.subscribe(({ clips, recording }) => {
+  fromStore.subscribe(({ clips, recording, currentSlide }) => {
     getStatusBoxEl().innerHTML = !!recording ? `<p>Recording</P>` : '<small style="color: #ccc; font-size: small;">Click `R` to record</small>';
     getDownloadBtn().style.opacity = !!clips?.length ? 1 : 0;
     if (recording) {
@@ -33,13 +33,13 @@ export default function () {
     if (!ini) {
       renderClips({ clips }, rootEl);
     } else {
-      if (currClips !== clips) {
+      if (currSlide !== currentSlide) {
         renderClips({ clips }, rootEl);
       }
     }
 
     ini = true;
-    currClips = clips;
+    currSlide = currentSlide;
   });
 }
 
