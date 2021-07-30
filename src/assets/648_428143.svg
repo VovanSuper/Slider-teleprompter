@@ -1,0 +1,6 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1200" height="900" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M296 138H904L296 762V138Z" fill="#555555"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M904 138V762H296L904 138Z" fill="#3A3A3A"/>
+<rect x="296" y="422" width="608" height="57" fill="white"/>
+</svg>

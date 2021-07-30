@@ -22,8 +22,12 @@
   },
   "scripts": {
     "start": "npm run lite",
+    "serve": "vite preview",
+    "deck": "marp --no-stdin slides/slide1.md -o dist/index.html",
+    "serve-slides": "npx @marp-team/marp-cli@latest -s ./slides",
     "deck:marp": "marp --no-stdin slides/slide1.md -o dist/index.html",
     "deck:build": "node ./maker.js",
+    "deck:teleprompter:build": "node ./maker.js --slide=slides/Teleprompter.md",
     "deck:build:sample2": "node ./maker.js --slide=slides/slide2.md",
     "lite": "npx lite-server",
     "presample:run": "npm i",
