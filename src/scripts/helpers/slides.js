@@ -7,14 +7,27 @@ const { getElapsedTime } = timeFuncs;
 const nextBtn = document.querySelector('button[data-bespoke-marp-osc="next"]');
 const prevBtn = document.querySelector('button[data-bespoke-marp-osc="prev"]');
 
+window.addEventListener('keysEvent', (e) => {
+  console.log({ e });
+  if (!!e) {
+    dispatchCurrentSlideIndex();
+  }
+});
+
 function optToSliderButtons() {
-  [nextBtn, prevBtn].forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      if (!!e) {
-        dispatchCurrentSlideIndex();
-      }
-    });
-  });
+  [nextBtn, prevBtn].forEach(
+    /**
+     *
+     * @param {HTMLButtonElement} btn
+     */
+    (btn) => {
+      btn.addEventListener('click', (e) => {
+        if (!!e) {
+          dispatchCurrentSlideIndex();
+        }
+      });
+    }
+  );
 }
 
 function dispatchCurrentSlideIndex() {

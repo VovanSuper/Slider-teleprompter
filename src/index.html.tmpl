@@ -8,6 +8,24 @@
   <link rel="stylesheet" href="styles/style.css">
   <title>Slider Teleprompter</title>
 
+  <script src="./scripts/bespoke.js"></script>
+  <script>
+    (function () {
+      console.log('Attaching')
+      document.addEventListener('keydown', e => {
+        let keysEvent = new CustomEvent('keysEvent', {
+          detail: {
+            originalEvent: e
+          }
+        });
+        window.dispatchEvent(keysEvent);
+      });
+    })();
+  </script>
+
+  <script type="module">
+    import('/scripts/main.js').then(mod => mod.default())
+  </script>
   <link rel="shortcut icon" href="Teleprompter.svg">
 </head>
 
@@ -26,10 +44,6 @@
     <aside class="notes"></aside>
     <button class="btn-download">Save All</button>
   </div>
-  <script src="scripts/bespoke.js"></script>
-  <script type="module">
-    import('/scripts/main.js').then(mod => mod.default())
-  </script>
 </body>
 
 </html>
