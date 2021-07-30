@@ -23,7 +23,8 @@
   "scripts": {
     "start": "run-s build:teleprompter:full serve",
     "build:vite": "vite build",
-    "build:full": "run-s deck:build build:vite",
+    "build:full:old": "run-s deck:build build:vite",
+    "build:full": "run-s deck:teleprompter:build build:vite",
     "build:teleprompter:full": "run-s deck:teleprompter:build build:vite",
     "serve": "vite preview",
     "deck": "marp --no-stdin slides/slide1.md -o dist/index.html",
