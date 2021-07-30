@@ -6,6 +6,9 @@ import { optToSliderButtons, dispatchCurrentSlideIndex } from './helpers/slides.
 
 const rootEl = document.getElementById('root');
 
+let ini = false;
+let currClips = [];
+
 /**
  *
  * @returns {HTMLButtonElement}
@@ -20,10 +23,23 @@ export default function () {
   navigator.permissions.query({ name: 'microphone' }).then((micAllowed) => micAllowed.state === 'granted');
   fromStore.subscribe(({ clips, recording }) => {
     getStatusBoxEl().innerHTML = !!recording ? `<p>Recording</P>` : '<small style="color: #ccc; font-size: small;">Click `R` to record</small>';
-    renderClips({ clips }, rootEl);
     getDownloadBtn().style.opacity = !!clips?.length ? 1 : 0;
-    if (recording) getDownloadBtn().classList.add('btn-recording');
-    else getDownloadBtn().classList.remove('btn-recording');
+    if (recording) {
+      getDownloadBtn().classList.add('btn-recording');
+    } else {
+      getDownloadBtn().classList.remove('btn-recording');
+    }
+
+    if (!ini) {
+      renderClips({ clips }, rootEl);
+    } else {
+      if (currClips !== clips) {
+        renderClips({ clips }, rootEl);
+      }
+    }
+
+    ini = true;
+    currClips = clips;
   });
 }
 
@@ -87,7 +103,7 @@ function handleDownloadClick() {
       .then(async () => {
         // let fileHandle = await window.showSaveFilePicker(metadataOpts);
 
-        const fileHandle = await dirHandler.getFileHandle('clips-metadata.json', { create: true });;
+        const fileHandle = await dirHandler.getFileHandle('clips-metadata.json', { create: true });
         const writable = await fileHandle.createWritable();
         await writable.write(JSON.stringify(meta), 'clips-metadata.json');
         await writable.close();
