@@ -19,10 +19,11 @@ pagination: true
 
 **the slide brief definition goes here**
 
+**the slide brief definition goes here**
 ```js
-let variable1 = `
-    This is a simple sliers
-    and We like it much!`;
+  let variable1 = `
+    This is a simple sliders
+    with code highlighting!`
 ```
 
 ---
