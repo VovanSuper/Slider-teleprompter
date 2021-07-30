@@ -29,5 +29,5 @@ let variable1 = `
 
 ## Slide Three
 
-**This is just an another slide**
-![Lotus](./assets/lotus.webp)
+**This is just an another slide (with a local image**
+![Lotus](./assets/lotus.webp =600x400)
