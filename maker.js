@@ -1,5 +1,15 @@
+#!/usr/bin/env node
+
 const fs = require('fs');
+const { copySync, existsSync } = require('fs-extra');
 const { join, extname, basename, resolve } = require('path');
+const yargs = require('yargs/yargs');
+const { hideBin } = require('yargs/helpers');
+
+const argv = yargs(hideBin(process.argv)).argv;
+
+console.log({ argv, slidesSrc: argv.slide });
+
 const { Element, Marpit } = require('@marp-team/marpit');
 const { marpCli } = require('@marp-team/marp-cli');
 const { parse, Node } = require('node-html-parser');
@@ -10,7 +20,10 @@ const cheerio = require('cheerio');
 // const bespokeMdIt = require('bespoke-markdownit');
 
 const slidesPath = 'slides';
+const assetsSrcPath = `${slidesPath}/assets/`;
+
 const srcPath = 'src';
+const assetsDestPath = join(__dirname, `${srcPath}`, 'assets/');
 
 const templateName = 'index.html.tmpl';
 
@@ -23,6 +36,11 @@ const marpit = new Marpit({
   container: [new Element('article', { id: 'p' }), new Element('div', { class: 'slides deck-container' })],
   slideContainer: new Element('section', { class: 'slide' }),
 });
+
+// if (fs.existsSync(resolve(assetsPath))) {
+//   console.log(resolve(assetsPath));
+//   copy(assetsPath, join(__dirname, srcPath), { recursive: true, overwrite: true });
+// }
 
 const theme = `
 /* @theme example */
@@ -47,7 +65,7 @@ h1 {
 marpit.themeSet.default = marpit.themeSet.add(theme);
 
 // 3. Render markdown
-const markdownSrc = join(slidesPath, 'slide1.md');
+const markdownSrc = argv.slide || join(slidesPath, 'slide1.md');
 
 // const { html, css } = marpit.render(markdownSrc);
 
@@ -65,7 +83,7 @@ const markdownSrc = join(slidesPath, 'slide1.md');
 const fileName = basename(markdownSrc, '.md');
 
 const outputHTML = `${slidesPath}/${fileName}.html`;
-const templateHTML = `${srcPath}/${templateName}`;
+const templateHTMLPath = `${srcPath}/${templateName}`;
 
 const outputFile = join(__dirname, srcPath, `index.html`);
 
@@ -75,11 +93,11 @@ marpCli([markdownSrc])
       throw new Error(`Failure (Exit status: ${exitStatus})`);
     } else {
       const generatedHTML = fs.readFileSync(join(__dirname, outputHTML), { encoding: 'utf-8' }).toString();
-      const tempalateHTML = fs.readFileSync(join(__dirname, templateHTML), { encoding: 'utf-8' }).toString();
+      const templateHTML = fs.readFileSync(join(__dirname, templateHTMLPath), { encoding: 'utf-8' }).toString();
 
       const parsedSlidesHTML = parse(generatedHTML);
 
-      const $ = cheerio.load(tempalateHTML);
+      const $ = cheerio.load(templateHTML);
 
       const styles = parsedSlidesHTML.querySelectorAll('style');
       const content = parsedSlidesHTML.querySelector('body').innerHTML;
@@ -94,6 +112,10 @@ marpCli([markdownSrc])
       $('#root-main').append(content);
 
       fs.writeFileSync(outputFile, $.html({ decodeEntities: false, xmlMode: false }), { encoding: 'utf-8' });
+
+      if (existsSync(assetsSrcPath)) {
+        copySync(assetsSrcPath, assetsDestPath);
+      }
     }
   })
   .catch(console.error);
