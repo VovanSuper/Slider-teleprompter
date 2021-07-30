@@ -3,7 +3,7 @@ marp: true
 theme: uncover
 backgroundColor: #2aff1395
 description: A test slide using Marp
-class: "slide"
+class: 'slide'
 header: Sample Slider
 pagination: true
 ---
@@ -18,12 +18,16 @@ pagination: true
 ## Slide Two
 
 **the slide brief definition goes here**
+
 ```js
-  let variable1 = `
+let variable1 = `
     This is a simple sliers
-    and We like it much!`
+    and We like it much!`;
 ```
 
 ---
+
 ## Slide Three
-**This is just an another slide**
+
+**This is just an another slide (with a local image**
+![Lotus](./assets/lotus.webp =600x400)
