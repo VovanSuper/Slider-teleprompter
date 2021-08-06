@@ -25,15 +25,17 @@
 }
 
 .notes .note-content {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
   vertical-align: middle;
   position: relative;
 }
 
-.notes .note-content > li {
+.notes .note-content > ul > li {
   position: relative;
 }
 
-.notes .note-content > li audio {
+.notes .note-content > .note-media > video {
   max-width: 100%;
 }
 
@@ -71,8 +73,10 @@
   position: relative;
 }
 
-.note-footer > audio {
-  width: 100%;
-  max-width: 100%;
-  height: 2rem;
+
+@media screen and (max-width: 780px) {
+  .notes .note-content {
+    grid-template-columns: auto;
+    grid-template-rows: 1fr 1fr;
+  }
 }

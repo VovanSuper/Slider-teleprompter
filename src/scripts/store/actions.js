@@ -12,7 +12,7 @@ export const actionTypes = {
 export const setCurrentSlide = ({ id, time = null }) => ({ action: { type: actionTypes.setCurrentSlide }, payload: { id, time } });
 
 export const startRecording = () => ({ action: { type: actionTypes.startRecording } });
-export const stopRecording = ({ data }) => ({ action: { type: actionTypes.stopRecording }, payload: { data } });
+export const stopRecording = ({ data, ext }) => ({ action: { type: actionTypes.stopRecording }, payload: { data, ext } });
 
 export const setTimer = ({ timer }) => ({ action: { type: actionTypes.setTimer }, payload: { timer } });
 export const getElapsedTimer = () => ({ action: { type: actionTypes.getElapsedTimer } });

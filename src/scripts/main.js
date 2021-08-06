@@ -34,7 +34,7 @@ function handleDownloadClick() {
   getDownloadBtn().addEventListener('click', async function downloadHandler(e) {
     const { clips, recording } = fromStore.getStateSnapshot();
     if (recording) return;
-    const type = 'audio/webm';
+    const type = 'video/webm';
     const allRecs = clips.map(({ id, slides, data }) => ({
       file: new File([data], `Slide-${id}`, { type }),
       id,
@@ -42,22 +42,22 @@ function handleDownloadClick() {
     }));
 
     let meta = { clips: [] };
-    const audiofileOpts = {
-      types: [
-        {
-          description: 'Recorded clips',
-          accept: { [type]: ['.weba'] },
-        },
-      ],
-    };
-    const metadataOpts = {
-      types: [
-        {
-          description: 'Recorded clips metadata',
-          accept: { 'text/json': ['.json'] },
-        },
-      ],
-    };
+    // const audiofileOpts = {
+    //   types: [
+    //     {
+    //       description: 'Recorded clips',
+    //       accept: { [type]: ['.webm'] },
+    //     },
+    //   ],
+    // };
+    // const metadataOpts = {
+    //   types: [
+    //     {
+    //       description: 'Recorded clips metadata',
+    //       accept: { 'text/json': ['.json'] },
+    //     },
+    //   ],
+    // };
     let dirHandler = await window.showDirectoryPicker();
     // console.log({ name: dirHandler.name });
     // console.log({ entries: dirHandler.entries().map((v) => v) });
@@ -71,10 +71,10 @@ function handleDownloadClick() {
       allRecs.map(async ({ file, slides, id }) => {
         // let fileHandle = await window.showSaveFilePicker(audiofileOpts);
 
-        let fileHandle = await dirHandler.getFileHandle(`Slide-${id}.weba`, { create: true });
+        let fileHandle = await dirHandler.getFileHandle(`Slide-${id}.webm`, { create: true });
         const writable = await fileHandle.createWritable();
 
-        await writable.write(file, fileHandle.name + '.weba', file.type);
+        await writable.write(file, fileHandle.name + '.webm', file.type);
         await writable.close();
 
         meta = {
@@ -82,12 +82,12 @@ function handleDownloadClick() {
             id,
             slides,
             // audio: audioBas64,
-            file: `${file.name}.weba`,
+            file: `${file.name}.webm`,
           }),
         };
       })
     )
-      .then(async () => {
+      .finally(async () => {
         // let fileHandle = await window.showSaveFilePicker(metadataOpts);
 
         const fileHandle = await dirHandler.getFileHandle('clips-metadata.json', { create: true });

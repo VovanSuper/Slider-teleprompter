@@ -19,7 +19,7 @@ body {
   height: 100%;
   display: grid;
   gap: 1rem;
-  grid-template-columns: 8fr 4fr;
+  grid-template-columns: 7fr 5fr;
   grid-template-rows: 1fr 10fr 1fr;
   position: relative;
 }

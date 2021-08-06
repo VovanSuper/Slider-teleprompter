@@ -6,14 +6,19 @@ const renderNote = (clip, notesEl, rootEl) => {
   let noteEl = document.createElement('section');
   let noteElHeader = document.createElement('header');
   let noteElFooter = document.createElement('footer');
-  let noteElContent = document.createElement('ul');
-  if (!!clip.slides?.length) addNoteSlidesList(noteElContent, clip);
-  // noteElContent.innerHTML = content;
-  clip.data && addAudioElementToNote(noteElFooter, clip.data);
+  let noteElContent = document.createElement('div');
+  let noteSlidesNamesEl = document.createElement('ul');
+  let noteClipEl = document.createElement('div');
+  if (!!clip.slides?.length) addNoteSlidesList(noteSlidesNamesEl, clip);
+  if (!!clip.data) addMediaElementToNote(noteClipEl, clip.data);
 
   noteElHeader.classList.add('note-header');
   noteElFooter.classList.add('note-footer');
   noteElContent.classList.add('note-content');
+  noteSlidesNamesEl.classList.add('note-slides');
+  noteClipEl.classList.add('note-media');
+  noteElContent.appendChild(noteSlidesNamesEl);
+  noteElContent.appendChild(noteClipEl);
   noteElHeader.innerHTML = `<h1>Clip ${clip.id}</h1>`;
   noteEl.appendChild(noteElHeader);
   noteEl.appendChild(noteElContent);
@@ -47,17 +52,17 @@ const addNoteSlidesList = (noteContentUl, clip) => {
   }
 };
 
-const addAudioElementToNote = (noteFooterEl, blob) => {
-  if (!!blob) {
-    const audio = window.URL.createObjectURL(blob);
-    const audioEl = document.createElement('audio');
-    audioEl.controls = true;
+const addMediaElementToNote = (nodeSlidesContainerEl, { data, ext }) => {
+  if (!!data) {
+    const video = window.URL.createObjectURL(data);
+    const videoEl = document.createElement('video');
+    videoEl.controls = true;
     try {
-      audioEl.src = audio;
+      videoEl.src = video;
     } catch {
-      audioEl.srcObject = audio;
+      videoEl.srcObject = video;
     }
-    noteFooterEl.appendChild(audioEl);
+    nodeSlidesContainerEl.appendChild(videoEl);
   }
 };
 

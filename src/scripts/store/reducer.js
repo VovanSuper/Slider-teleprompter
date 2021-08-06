@@ -35,7 +35,7 @@ export default (state, { action: { type }, payload }) => {
         ...state,
         recording: false,
         timer: null,
-        clips: state.clips.map((clip) => (clip.id !== state.clips.length ? { ...clip } : { ...clip, data: payload.data })),
+        clips: state.clips.map((clip) => (clip.id !== state.clips.length ? { ...clip } : { ...clip, data: { ...payload } })),
       };
 
     case actionTypes.setTimer:
