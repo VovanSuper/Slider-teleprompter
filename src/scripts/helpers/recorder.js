@@ -81,7 +81,7 @@ export class Recorder {
   }
 
   #_getSupportedCodecFileExt() {
-    let types = ['video/webm;codecs=vp8,vp9,opus', 'video/webm;codecs=vp9,opus', 'video/webm'];
+    let types = ['video/webm;codecs=vp9,opus', 'video/webm'];
     for (let mime of types) {
       if (MediaRecorder.isTypeSupported(mime)) return { mime, ext: '.webm' };
     }

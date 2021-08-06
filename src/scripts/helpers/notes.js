@@ -10,13 +10,13 @@ const renderNote = (clip, notesEl, rootEl) => {
   let noteSlidesNamesEl = document.createElement('ul');
   let noteClipEl = document.createElement('div');
   if (!!clip.slides?.length) addNoteSlidesList(noteSlidesNamesEl, clip);
-  if (!!clip.data) addMediaElementToNote(noteClipEl, clip.data);
+  if (!!clip.data) addMediaElementToNote(noteClipEl, { data: clip.data });
 
   noteElHeader.classList.add('note-header');
   noteElFooter.classList.add('note-footer');
   noteElContent.classList.add('note-content');
-  noteSlidesNamesEl.classList.add('note-slides');
-  noteClipEl.classList.add('note-media');
+  noteSlidesNamesEl.classList.add('note-slides', 'note-content__item');
+  noteClipEl.classList.add('note-media', 'note-content__item');
   noteElContent.appendChild(noteSlidesNamesEl);
   noteElContent.appendChild(noteClipEl);
   noteElHeader.innerHTML = `<h1>Clip ${clip.id}</h1>`;
@@ -37,9 +37,8 @@ const renderClips = ({ clips }, rootEl) => {
 
 const addNoteSlidesList = (noteContentUl, clip) => {
   const { slides } = clip || {};
-
   try {
-    slides.forEach((slide) => {
+    (slides || []).forEach((slide) => {
       const liEl = document.createElement('li');
       const liSpan = document.createElement('span');
       liSpan.innerText = `Slide ${slide.id}`;
@@ -52,18 +51,16 @@ const addNoteSlidesList = (noteContentUl, clip) => {
   }
 };
 
-const addMediaElementToNote = (nodeSlidesContainerEl, { data, ext }) => {
-  if (!!data) {
-    const video = window.URL.createObjectURL(data);
-    const videoEl = document.createElement('video');
-    videoEl.controls = true;
-    try {
-      videoEl.src = video;
-    } catch {
-      videoEl.srcObject = video;
-    }
-    nodeSlidesContainerEl.appendChild(videoEl);
+const addMediaElementToNote = (nodeSlidesContainerEl, { data }) => {
+  const video = window.URL.createObjectURL(data);
+  const videoEl = document.createElement('video');
+  videoEl.controls = true;
+  try {
+    videoEl.src = video;
+  } catch {
+    videoEl.srcObject = video;
   }
+  nodeSlidesContainerEl.appendChild(videoEl);
 };
 
 const clearNoteEls = (notesEl) => {

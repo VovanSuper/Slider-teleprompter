@@ -1,3 +1,5 @@
+@import url('../theme.css');
+
 .notes {
   overflow: auto;
   background: #ccc;
@@ -11,24 +13,33 @@
 
 .note {
   display: grid;
-  grid-template-rows: 3rem minmax(5rem, auto) 2rem;
+  grid-template-rows: 2rem minmax(5rem, auto) 2rem;
   background: pink;
   position: relative;
   border: 1px solid #f7f7f7;
   border-radius: 0.4rem;
   margin: 1.2rem;
-  padding: 1rem;
+  padding: 0.4rem 1rem;
 }
 
 .note > .note-header {
-  padding-bottom: 1rem;
+  margin: 0.1rem;
+}
+.note > .note-header > h1 {
+  padding: 0;
+  margin: 0;
 }
 
 .notes .note-content {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  gap: 1rem;
+  grid-template-columns: 1fr 1.1fr;
   vertical-align: middle;
   position: relative;
+}
+
+.note-content .note-content__item {
+  /* background-color: var(--bg-color); */
 }
 
 .notes .note-content > ul > li {
@@ -72,7 +83,6 @@
   max-width: 100%;
   position: relative;
 }
-
 
 @media screen and (max-width: 780px) {
   .notes .note-content {

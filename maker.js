@@ -87,7 +87,7 @@ marpCli([markdownSrc])
       styles.forEach((style) => {
         if (style.rawTagName === 'style') {
           let styleNode = '<style>' + style.text + '</style>';
-          $('head').append(styleNode);
+          $('head').prepend(styleNode);
         }
       });
       $('#root-main').append(content);
