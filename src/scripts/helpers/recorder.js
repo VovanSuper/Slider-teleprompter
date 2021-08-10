@@ -31,8 +31,11 @@ function handleRecording() {
 }
 
 export class Recorder {
+  /** @property @type {MediaStream} stream */
   stream;
+  /** @property @type {MediaRecorder} mediaRecorder */
   mediaRecorder;
+  /** @type {Blob|Blob[]} chunks */
   chunks = [];
 
   constructor() {
@@ -47,15 +50,17 @@ export class Recorder {
   }
 
   async start() {
-    // this.#_getSupportedMimes();
     try {
       fromStore.dispatch(startRecording());
       setStoreTimer(true);
       this.stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+      const audioTrack = this.stream.getAudioTracks();
+
+      console.log({ audioTrack });
 
       this.mediaRecorder = new MediaRecorder(this.stream, { mimeType: this.#_getSupportedCodecFileExt().mime });
-      this.mediaRecorder.onstart = (e) => console.log('Started recording');
-      this.mediaRecorder.onstop = (e) => {
+      this.mediaRecorder.onstart = (_e) => console.log('Started recording');
+      this.mediaRecorder.onstop = (_e) => {
         this.#_setMedia();
       };
       this.mediaRecorder.ondataavailable = (e) => {
@@ -63,6 +68,7 @@ export class Recorder {
           this.chunks.push(e.data);
         }
       };
+
       this.mediaRecorder.start();
 
       return this.stream;
@@ -99,7 +105,7 @@ export class Recorder {
     this.chunks = [];
   }
 
-  #_errorMsg(msg, error) {
+  #_errorMsg(msg, error = undefined) {
     getStatusBoxEl().innerHTML += '<p>' + msg + '</p>';
     if (typeof error !== 'undefined') {
       console.error(error);

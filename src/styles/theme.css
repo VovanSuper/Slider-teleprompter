@@ -1,3 +1,9 @@
 :root {
-  --bg-color: #d8d8d8; 
+  --bg-color: #c7c7c7;
+  --note-bg-color: #ffe2f2;
+  --save-btn-bg-color: #f15dad;
+  --wave-marker-color: hsl(0, 98%, 65%);
+  --wave-color: #2D2DC5;
+  --wave-progress-color: #fff54d;
+  --wave-end-color: #94b731;
 }

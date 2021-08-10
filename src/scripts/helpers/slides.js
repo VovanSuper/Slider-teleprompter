@@ -8,7 +8,6 @@ const nextBtn = document.querySelector('button[data-bespoke-marp-osc="next"]');
 const prevBtn = document.querySelector('button[data-bespoke-marp-osc="prev"]');
 
 window.addEventListener('keysEvent', (e) => {
-  console.log({ e });
   if (!!e) {
     dispatchCurrentSlideIndex();
   }

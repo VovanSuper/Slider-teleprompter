@@ -1,3 +1,5 @@
+// import { create } from 'wavesurfer.js';
+
 import createNoteCloserBtn from './closer-btn.js';
 
 const getNoteByIndex = (index) => document.querySelector(`.note[idx="${index}"]`);
@@ -11,6 +13,7 @@ const renderNote = (clip, notesEl, rootEl) => {
   let noteClipEl = document.createElement('div');
   if (!!clip.slides?.length) addNoteSlidesList(noteSlidesNamesEl, clip);
   if (!!clip.data) addMediaElementToNote(noteClipEl, { data: clip.data });
+  if (!!clip.data) createWave(clip.data, noteElFooter);
 
   noteElHeader.classList.add('note-header');
   noteElFooter.classList.add('note-footer');
@@ -62,6 +65,11 @@ const addMediaElementToNote = (nodeSlidesContainerEl, { data }) => {
   }
   nodeSlidesContainerEl.appendChild(videoEl);
 };
+
+const createWave = (blob, waveContainerEl) =>
+  WaveSurfer.create({ container: waveContainerEl, mediaControls: true, interact: true, mediaType: 'video', height: 75, responsive: true, waveColor: '#2D2DC5' }).loadBlob(
+    blob
+  );
 
 const clearNoteEls = (notesEl) => {
   !!notesEl.children.length && Array.from(notesEl.children).forEach((child) => notesEl.removeChild(child));

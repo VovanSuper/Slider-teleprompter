@@ -13,7 +13,7 @@
 
 .note {
   display: grid;
-  grid-template-rows: 2rem minmax(5rem, auto) 2rem;
+  grid-template-rows: 2rem minmax(5rem, auto) minmax(75px, auto);
   background: pink;
   position: relative;
   border: 1px solid #f7f7f7;
@@ -79,9 +79,14 @@
 }
 
 .note-footer {
-  display: block;
+  background-color: transparent;
+  overflow: hidden;;
+  border-radius: 2px;
+}
+
+.note-footer > wave {
   max-width: 100%;
-  position: relative;
+  background: var(--bg-color);
 }
 
 @media screen and (max-width: 780px) {

@@ -23,7 +23,7 @@ export const readBespokeCurrentSlideIndex = () => {
       const data = readLocalStorageBespokeData();
       const id = !!data && !!data['index'] ? parseInt(data['index']) + 1 : 1;
       // const id = parseInt(getCurrentBespokeIndex()) + 1 || 1;
-      console.log({ id });
+      // console.log({ id });
       return resolve({ id });
     }, 1);
   });
