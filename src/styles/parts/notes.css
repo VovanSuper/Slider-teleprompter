@@ -80,13 +80,20 @@
 
 .note-footer {
   background-color: transparent;
-  overflow: hidden;;
+  overflow: hidden;
   border-radius: 2px;
 }
 
 .note-footer > wave {
   max-width: 100%;
   background: var(--bg-color);
+}
+
+marker  {
+  font-weight: 200;
+}
+marker svg {
+  font-weight: 200;
 }
 
 @media screen and (max-width: 780px) {

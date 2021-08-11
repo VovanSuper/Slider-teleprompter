@@ -1,13 +1,13 @@
 @import url('./theme.css');
 @import url('./parts/header.css');
 @import url('./parts/dialog.css');
-@import url('./parts/layout.css');
 @import url('./parts/notes.css');
+@import url('./parts/layout.css');
 
 html,
 body {
   height: 100vh;
-  width: 100%;
+  width: 100vw;
   padding: 0;
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

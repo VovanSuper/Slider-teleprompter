@@ -1,4 +1,5 @@
-// import { create } from 'wavesurfer.js';
+// import WaveSurfer, { create } from 'wavesurfer.js';
+// import * as WaveSurfer from '../wavesurfer.js/dist/wavesurfer.js';
 
 import createNoteCloserBtn from './closer-btn.js';
 
@@ -13,10 +14,11 @@ const renderNote = (clip, notesEl, rootEl) => {
   let noteClipEl = document.createElement('div');
   if (!!clip.slides?.length) addNoteSlidesList(noteSlidesNamesEl, clip);
   if (!!clip.data) addMediaElementToNote(noteClipEl, { data: clip.data });
-  if (!!clip.data) createWave(clip.data, noteElFooter);
+  if (!!clip.data) createWave(clip.data, noteElFooter, crateMarkers(clip.slides));
 
   noteElHeader.classList.add('note-header');
   noteElFooter.classList.add('note-footer');
+
   noteElContent.classList.add('note-content');
   noteSlidesNamesEl.classList.add('note-slides', 'note-content__item');
   noteClipEl.classList.add('note-media', 'note-content__item');
@@ -66,10 +68,25 @@ const addMediaElementToNote = (nodeSlidesContainerEl, { data }) => {
   nodeSlidesContainerEl.appendChild(videoEl);
 };
 
-const createWave = (blob, waveContainerEl) =>
-  WaveSurfer.create({ container: waveContainerEl, mediaControls: true, interact: true, mediaType: 'video', height: 75, responsive: true, waveColor: '#2D2DC5' }).loadBlob(
-    blob
-  );
+const createWave = (blob, waveContainerEl, markers = []) =>
+  WaveSurfer.create({
+    container: waveContainerEl,
+    mediaControls: true,
+    interact: true,
+    mediaType: 'video',
+    height: 75,
+    responsive: true,
+    waveColor: '#2D2DC5',
+    plugins: [WaveSurfer.markers.create({ markers })],
+  }).loadBlob(blob);
+
+const crateMarkers = (slides) =>
+  slides.map(({ time, id }) => ({
+    time: time / 1000,
+    label: `Slide ${id}`,
+    color: '#fd4e4e',
+    position: 'top',
+  }));
 
 const clearNoteEls = (notesEl) => {
   !!notesEl.children.length && Array.from(notesEl.children).forEach((child) => notesEl.removeChild(child));

@@ -27,22 +27,24 @@
 
 @media screen and (max-width: 600px) {
   #root {
-    grid-template-columns: 12fr;
-    grid-template-rows: 1fr 6fr 5fr;
+    grid-template-columns: 100%;
+    grid-template-rows: 1fr 5fr auto 1fr;
     gap: 0;
+  }
+  .header {
+    grid-row: 1;
   }
   .container {
     grid-row: 2;
-    grid-column: span 3;
   }
   .notes {
     grid-row: 3;
-    grid-column: span 3;
+    grid-column: 1;
   }
   
   .btn-download {
     grid-row: 4;
-    grid-column: 1;
+    /* grid-column: 1; */
   }
 }
 
