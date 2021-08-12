@@ -220,10 +220,10 @@ var MarkersPlugin = /*#__PURE__*/function () {
       svgEl.setAttribute("viewBox", "0 0 32 7");
       
       svgEl.innerHTML = `
-      <rect width="32" height="7" rx="4" fill="#FD4E4E"></rect>
-      <text x="5" y="5" font-family="Montserrat" font-size="6" fill="white"> ${label} </text>
-        `;
-return svgEl;
+        <rect width="32" height="7" rx="4" fill="#FD4E4E"></rect>
+        <text x="5" y="5" font-family="Montserrat" font-size="6" fill="white"> ${label} </text>
+          `;
+      return svgEl;
     }
   }, {
     key: "_createMarkerElement",

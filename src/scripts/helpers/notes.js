@@ -14,7 +14,21 @@ const renderNote = (clip, notesEl, rootEl) => {
   let noteClipEl = document.createElement('div');
   if (!!clip.slides?.length) addNoteSlidesList(noteSlidesNamesEl, clip);
   if (!!clip.data) addMediaElementToNote(noteClipEl, { data: clip.data });
-  if (!!clip.data) createWave(clip.data, noteElFooter, crateMarkers(clip.slides));
+  if (!!clip.data) {
+    const surfer = createWave(clip.data, noteElFooter, crateMarkers(clip.slides));
+    let wavePlayBtn = document.createElement('button');
+    wavePlayBtn.classList.add('btn-wave--play');
+    surfer.on('ready', function () {
+      wavePlayBtn.addEventListener('click', function PlaySurfer() {
+        console.log({ surfer });
+        // if (!!surfer.isPlaying) return surfer.pause();
+        surfer.play();
+      });
+      return () => wavePlayBtn.removeEventListener(PlaySurfer);
+    });
+
+    noteElFooter.appendChild(wavePlayBtn);
+  }
 
   noteElHeader.classList.add('note-header');
   noteElFooter.classList.add('note-footer');
@@ -68,17 +82,30 @@ const addMediaElementToNote = (nodeSlidesContainerEl, { data }) => {
   nodeSlidesContainerEl.appendChild(videoEl);
 };
 
-const createWave = (blob, waveContainerEl, markers = []) =>
-  WaveSurfer.create({
+const createWave = (blob, waveContainerEl, markers = []) => {
+  /** @type {HTMLCanvasElement} */
+  const canvas = document.createElement('canvas');
+  canvas.style.visibility = 'collapsed';
+  const ctx = canvas.getContext('2d');
+
+  let gradient = ctx.createLinearGradient(0, 10, 0, 0);
+  gradient.addColorStop(0, '#3030C6');
+  gradient.addColorStop(1, '#6767D9');
+
+  const wavesurfer = WaveSurfer.create({
     container: waveContainerEl,
     mediaControls: true,
     interact: true,
     mediaType: 'video',
     height: 75,
     responsive: true,
-    waveColor: '#2D2DC5',
+    // waveColor: '#2D2DC5',
+    waveColor: gradient,
     plugins: [WaveSurfer.markers.create({ markers })],
-  }).loadBlob(blob);
+  });
+  wavesurfer.loadBlob(blob);
+  return wavesurfer;
+};
 
 const crateMarkers = (slides) =>
   slides.map(({ time, id }) => ({

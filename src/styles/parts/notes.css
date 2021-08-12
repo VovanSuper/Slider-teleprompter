@@ -82,14 +82,31 @@
   background-color: transparent;
   overflow: hidden;
   border-radius: 2px;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.note-footer > .btn-wave--play {
+  flex: 0 1 1rem;
+  max-width: 1rem;
+  height: 0px;
+  border: none;
+  background: transparent;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 20px solid black;
+  top: 50%;
+  position: relative;
+  transform: translateY(-50%);
 }
 
 .note-footer > wave {
+  flex: 2 1 auto;
   max-width: 100%;
   background: var(--bg-color);
 }
 
-marker  {
+marker {
   font-weight: 200;
 }
 marker svg {
@@ -101,4 +118,8 @@ marker svg {
     grid-template-columns: auto;
     grid-template-rows: 1fr 1fr;
   }
+}
+
+.note-footer > wave > wave {
+  border-right: 3px solid var(--wave-progress-color) !important;
 }
