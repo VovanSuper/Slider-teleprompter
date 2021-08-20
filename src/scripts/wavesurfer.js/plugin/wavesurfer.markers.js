@@ -150,7 +150,8 @@ var MarkersPlugin = /*#__PURE__*/function () {
         label: params.label,
         color: params.color || DEFAULT_FILL_COLOR,
         position: params.position || DEFAULT_POSITION,
-        idx: params.idx
+        idx: params.idx,
+        markerId: params.markerId
       };
 
       if (params.markerElement) {
@@ -241,6 +242,7 @@ var MarkersPlugin = /*#__PURE__*/function () {
       });
       
       el.setAttribute('idx', marker.idx);
+      el.setAttribute('data-marker-id', marker.markerId);
 
       var line = document.createElement('div');
       this.style(line, {

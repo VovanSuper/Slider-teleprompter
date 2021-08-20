@@ -58,7 +58,6 @@ export const timeFuncs = {
 
 /**@param {HTMLElement} el  @param {HTMLElement} rootEl @param {number} clipDuration @param {number} clipId  */
 export const addDragHandler = (el, rootEl, clipDuration, clipId) => {
-  console.log({ rootEl });
   let isDown = false;
   let offset = 0;
   let elLeft = 0;
@@ -69,7 +68,7 @@ export const addDragHandler = (el, rootEl, clipDuration, clipId) => {
   document.addEventListener('mousemove', OnMouseMove, true);
   el.ondrag = () => false;
 
-  const slideId = +el.getAttribute('idx');
+  const slideId = +el.getAttribute('data-marker-id');
 
   /**@param {MouseEvent} e */ function OnMouseDown(e) {
     const { x } = e;
@@ -81,7 +80,6 @@ export const addDragHandler = (el, rootEl, clipDuration, clipId) => {
     if (!!!newTime) return;
 
     isDown = false;
-    console.log({ newTime });
 
     el.removeEventListener('mousedown', OnMouseDown, true);
     document.removeEventListener('mouseup', OnMouseUp, true);

@@ -78,7 +78,7 @@ const renderClips = ({ clips }, rootEl) => {
 const addNoteSlidesList = (noteContentUl, clip) => {
   const { slides } = clip || {};
   try {
-    (slides || []).forEach((slide) => {
+    (slides || []).forEach((slide, i) => {
       const liEl = document.createElement('li');
       const liSpan = document.createElement('span');
       liSpan.innerText = `Slide ${slide.id}`;
@@ -106,12 +106,11 @@ const addMediaElementToNote = (nodeSlidesContainerEl, { data }) => {
 
 const createWave = (blob, waveContainerEl, markers = []) => {
   // const createWave = (mediaEl, waveContainerEl, markers = []) => {
-  /** @type {HTMLCanvasElement} */
+
   const canvas = document.createElement('canvas');
   canvas.style.visibility = 'collapsed';
   const ctx = canvas.getContext('2d');
-
-  let gradient = ctx.createLinearGradient(0, 10, 10, 0);
+  const gradient = ctx.createLinearGradient(0, 10, 10, 0);
   gradient.addColorStop(0, '#3030C6');
   gradient.addColorStop(1, '#6767D9');
 
@@ -133,11 +132,12 @@ const createWave = (blob, waveContainerEl, markers = []) => {
 
 /** @param @type{WaveSurfer} */
 const crateMarkers = (slides) =>
-  slides.map(({ time, id }) => ({
+  slides.map(({ time, id }, i) => ({
     time: time / 1000,
     label: `Slide ${id}`,
     color: '#fd4e4e',
     position: 'top',
+    markerId: i,
     idx: id,
   }));
 

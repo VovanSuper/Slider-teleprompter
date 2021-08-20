@@ -58,7 +58,7 @@ export default (state, { action: { type }, payload }) => {
           clip.id === payload.clipId
             ? {
                 ...clip,
-                slides: clip.slides.map((slide) => (slide.id === payload.slideId ? { ...slide, time: payload.time } : { ...slide })),
+                slides: clip.slides.map((slide, i) => (i === payload.slideId ? { ...slide, time: payload.time } : { ...slide })),
               }
             : clip
         ),
