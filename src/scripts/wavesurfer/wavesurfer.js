@@ -1,5 +1,5 @@
 /*!
- * wavesurfer.js 5.1.0 (2021-06-20)
+ * wavesurfer.js 5.2.0 (2021-08-16)
  * https://wavesurfer-js.org
  * @license BSD-3-Clause
  */
@@ -12,7 +12,7 @@
 		exports["WaveSurfer"] = factory();
 	else
 		root["WaveSurfer"] = factory();
-})(this, function() {
+})(self, function() {
 return /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -460,7 +460,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
@@ -960,7 +960,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
@@ -1643,7 +1643,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
@@ -1798,7 +1798,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
@@ -2984,6 +2984,12 @@ Object.defineProperty(exports, "withOrientation", ({
     return _orientation.default;
   }
 }));
+Object.defineProperty(exports, "ignoreSilenceMode", ({
+  enumerable: true,
+  get: function get() {
+    return _silenceMode.default;
+  }
+}));
 
 var _getId = _interopRequireDefault(__webpack_require__(/*! ./get-id */ "./src/util/get-id.js"));
 
@@ -3010,6 +3016,8 @@ var _fetch = _interopRequireDefault(__webpack_require__(/*! ./fetch */ "./src/ut
 var _clamp = _interopRequireDefault(__webpack_require__(/*! ./clamp */ "./src/util/clamp.js"));
 
 var _orientation = _interopRequireDefault(__webpack_require__(/*! ./orientation */ "./src/util/orientation.js"));
+
+var _silenceMode = _interopRequireDefault(__webpack_require__(/*! ./silence-mode */ "./src/util/silence-mode.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3469,6 +3477,56 @@ module.exports = exports.default;
 
 /***/ }),
 
+/***/ "./src/util/silence-mode.js":
+/*!**********************************!*\
+  !*** ./src/util/silence-mode.js ***!
+  \**********************************/
+/***/ ((module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.default = ignoreSilenceMode;
+
+/**
+ * Ignores device silence mode when using the `WebAudio` backend.
+ *
+ * Many mobile devices contain a hardware button to mute the ringtone for incoming
+ * calls and messages. Unfortunately, on some platforms like iOS, this also mutes
+ * wavesurfer's audio when using the `WebAudio` backend. This function creates a
+ * temporary `<audio>` element that makes sure the WebAudio backend keeps playing
+ * when muting the device ringer.
+ *
+ * @since 5.2.0
+ */
+function ignoreSilenceMode() {
+  // Set the src to a short bit of url encoded as a silent mp3
+  // NOTE The silence MP3 must be high quality, when web audio sounds are played
+  // in parallel the web audio sound is mixed to match the bitrate of the html sound
+  // 0.01 seconds of silence VBR220-260 Joint Stereo 859B
+  var audioData = "data:audio/mpeg;base64,//uQxAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAACcQCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA//////////////////////////////////////////////////////////////////8AAABhTEFNRTMuMTAwA8MAAAAAAAAAABQgJAUHQQAB9AAAAnGMHkkIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//sQxAADgnABGiAAQBCqgCRMAAgEAH///////////////7+n/9FTuQsQH//////2NG0jWUGlio5gLQTOtIoeR2WX////X4s9Atb/JRVCbBUpeRUq//////////////////9RUi0f2jn/+xDECgPCjAEQAABN4AAANIAAAAQVTEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQ=="; // disable iOS Airplay (setting the attribute in js doesn't work)
+
+  var tmp = document.createElement("div");
+  tmp.innerHTML = '<audio x-webkit-airplay="deny"></audio>';
+  var audioSilentMode = tmp.children.item(0);
+  audioSilentMode.src = audioData;
+  audioSilentMode.preload = "auto";
+  audioSilentMode.type = "audio/mpeg";
+  audioSilentMode.disableRemotePlayback = true; // play
+
+  audioSilentMode.play(); // cleanup
+
+  audioSilentMode.remove();
+  tmp.remove();
+}
+
+module.exports = exports.default;
+
+/***/ }),
+
 /***/ "./src/util/style.js":
 /*!***************************!*\
   !*** ./src/util/style.js ***!
@@ -3544,7 +3602,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
@@ -3628,6 +3686,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
  * pixels.
  * @property {boolean} hideScrollbar=false Whether to hide the horizontal
  * scrollbar when one would normally be shown.
+ * @property {boolean} ignoreSilenceMode=false If true, ignores device silence mode
+ * when using the `WebAudio` backend.
  * @property {boolean} interact=true Whether the mouse interaction will be
  * enabled at initialization. You can switch this parameter at any time later
  * on.
@@ -3865,6 +3925,7 @@ var WaveSurfer = /*#__PURE__*/function (_util$Observer) {
       forceDecode: false,
       height: 128,
       hideScrollbar: false,
+      ignoreSilenceMode: false,
       interact: true,
       loopSelection: true,
       maxCanvasWidth: 4000,
@@ -4382,6 +4443,11 @@ var WaveSurfer = /*#__PURE__*/function (_util$Observer) {
     key: "play",
     value: function play(start, end) {
       var _this7 = this;
+
+      if (this.params.ignoreSilenceMode) {
+        // ignores device hardware silence mode
+        util.ignoreSilenceMode();
+      }
 
       this.fireEvent('interaction', function () {
         return _this7.play(start, end);
@@ -5185,17 +5251,19 @@ var WaveSurfer = /*#__PURE__*/function (_util$Observer) {
     value: function decodeArrayBuffer(arraybuffer, callback) {
       var _this13 = this;
 
-      this.arraybuffer = arraybuffer;
-      this.backend.decodeArrayBuffer(arraybuffer, function (data) {
-        // Only use the decoded data if we haven't been destroyed or
-        // another decode started in the meantime
-        if (!_this13.isDestroyed && _this13.arraybuffer == arraybuffer) {
-          callback(data);
-          _this13.arraybuffer = null;
-        }
-      }, function () {
-        return _this13.fireEvent('error', 'Error decoding audiobuffer');
-      });
+      if (!this.isDestroyed) {
+        this.arraybuffer = arraybuffer;
+        this.backend.decodeArrayBuffer(arraybuffer, function (data) {
+          // Only use the decoded data if we haven't been destroyed or
+          // another decode started in the meantime
+          if (!_this13.isDestroyed && _this13.arraybuffer == arraybuffer) {
+            callback(data);
+            _this13.arraybuffer = null;
+          }
+        }, function () {
+          return _this13.fireEvent('error', 'Error decoding audiobuffer');
+        });
+      }
     }
     /**
      * Load an array buffer using fetch and pass the result to a callback
@@ -5445,7 +5513,7 @@ var WaveSurfer = /*#__PURE__*/function (_util$Observer) {
 }(util.Observer);
 
 exports.default = WaveSurfer;
-WaveSurfer.VERSION = "5.1.0";
+WaveSurfer.VERSION = "5.2.0";
 WaveSurfer.util = util;
 module.exports = exports.default;
 
@@ -5487,7 +5555,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
@@ -6281,7 +6349,17 @@ var WebAudio = /*#__PURE__*/function (_util$Observer) {
     value: function pause() {
       this.scheduledPause = null;
       this.startPosition += this.getPlayedTime();
-      this.source && this.source.stop(0);
+
+      try {
+        this.source && this.source.stop(0);
+      } catch (err) {// Calling stop can throw the following 2 errors:
+        // - RangeError (The value specified for when is negative.)
+        // - InvalidStateNode (The node has not been started by calling start().)
+        // We can safely ignore both errors, because:
+        // - The range is surely correct
+        // - The node might not have been started yet, in which case we just want to carry on without causing any trouble.
+      }
+
       this.setState(PAUSED);
       this.fireEvent('pause');
     }

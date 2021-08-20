@@ -17,7 +17,6 @@ export default function () {
   optToSliderButtons();
   handleRecording();
   handleDownloadClick();
-  navigator.permissions.query({ name: 'microphone' }).then((micAllowed) => micAllowed.state === 'granted');
   fromStore.subscribe(({ clips, recording, currentSlide }) => {
     getStatusBoxEl().innerHTML = !!recording ? `<p>Recording</P>` : '<small style="color: #ccc; font-size: small;">Click `R` to record</small>';
     getDownloadBtn().style.opacity = !!clips?.length ? 1 : 0;
@@ -43,8 +42,8 @@ function handleDownloadClick() {
       clips.map(async ({ id, slides, data, ext }) => {
         // let fileHandle = await window.showSaveFilePicker(audiofileOpts);
 
-        const file = new File([data], `Slide-${id}`);
-        let fileHandle = await dirHandler.getFileHandle(`Slide-${id}${ext}`, { create: true });
+        const file = new File([data], `Clip-${id}`);
+        let fileHandle = await dirHandler.getFileHandle(`Clip-${id}${ext}`, { create: true });
         const writable = await fileHandle.createWritable();
 
         await writable.write(file, `${fileHandle.name}${ext}`, file.type);

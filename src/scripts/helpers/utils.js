@@ -71,6 +71,8 @@ export const addDragHandler = (el, rootEl, clipDuration, clipId) => {
   const slideId = +el.getAttribute('data-marker-id');
 
   /**@param {MouseEvent} e */ function OnMouseDown(e) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
     const { x } = e;
     isDown = true;
     offset = el.offsetLeft - x;
@@ -78,12 +80,17 @@ export const addDragHandler = (el, rootEl, clipDuration, clipId) => {
 
   /**@param {MouseEvent} e */ function OnMouseUp(e) {
     if (!!!newTime) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
 
     isDown = false;
-
-    el.removeEventListener('mousedown', OnMouseDown, true);
-    document.removeEventListener('mouseup', OnMouseUp, true);
-    document.removeEventListener('mousemove', OnMouseMove, true);
+    newTime = newTime <= 0 ? 0 : newTime;
+    {
+      // Remove handlers, as the page to be re-rendered at dispatch ...
+      el.removeEventListener('mousedown', OnMouseDown, true);
+      document.removeEventListener('mouseup', OnMouseUp, true);
+      document.removeEventListener('mousemove', OnMouseMove, true);
+    }
     return fromStore.dispatch(updateClipTimePoint({ clipId, slideId, time: newTime }));
   }
 

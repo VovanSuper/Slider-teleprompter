@@ -1,6 +1,3 @@
-// import WaveSurfer, { create } from 'wavesurfer.js';
-// import * as WaveSurfer from '../wavesurfer.js/dist/wavesurfer.js';
-
 import { addDragHandler } from './utils.js';
 import createNoteCloserBtn from './closer-btn.js';
 
@@ -16,10 +13,10 @@ const renderNote = (clip, notesEl, rootEl) => {
   if (!!clip.slides?.length) addNoteSlidesList(noteSlidesNamesEl, clip);
 
   if (!!clip.data) {
-    const videoEl = addMediaElementToNote(noteClipEl, { data: clip.data });
-    const surfer = createWave(clip.data, noteElFooter, crateMarkers(clip.slides));
-    surfer.backend;
-    // const surfer = createWave(videoEl, noteElFooter, crateMarkers(clip.slides));
+    const videoEl = addMediaElementToNote(noteClipEl, { ...clip });
+    // const surfer = createWave(clip.data, noteElFooter, crateMarkers(clip.slides));
+    const surfer = createWave(videoEl, noteElFooter, crateMarkers(clip.slides));
+    // surfer.backend;
     let wavePlayBtn = document.createElement('button');
     wavePlayBtn.classList.add('btn-wave--play');
     surfer.on('ready', () => {
@@ -40,12 +37,12 @@ const renderNote = (clip, notesEl, rootEl) => {
       console.log({ markers, clipDuration, surferRootEl });
 
       markers.forEach((marker) => addDragHandler(marker.el, surferRootEl, clipDuration, clip.id));
-      wavePlayBtn.addEventListener('click', function PlaySurfer(_e) {
-        // console.log({ surfer });
-        if (!!surfer.isPlaying()) return surfer.pause();
-        surfer.play();
-        return () => wavePlayBtn.removeEventListener(PlaySurfer);
-      });
+      // wavePlayBtn.addEventListener('click', function PlaySurfer(_e) {
+      //   if (!!surfer.isPlaying()) return surfer.pause();
+      //   surfer.play();
+      //   return () => wavePlayBtn.removeEventListener(PlaySurfer);
+      // });
+      wavePlayBtn.addEventListener('click', surfer.playPause.bind(surfer));
     });
 
     noteElFooter.appendChild(wavePlayBtn);
@@ -91,8 +88,9 @@ const addNoteSlidesList = (noteContentUl, clip) => {
   }
 };
 
-const addMediaElementToNote = (nodeSlidesContainerEl, { data }) => {
-  const video = window.URL.createObjectURL(data);
+const addMediaElementToNote = (nodeSlidesContainerEl, { data, id, ..._rest }) => {
+  // const video = window.URL.createObjectURL(data);
+  const video = URL.createObjectURL(new File([data], `Clip-${id}`));
   const videoEl = document.createElement('video');
   videoEl.controls = true;
   try {
@@ -104,9 +102,8 @@ const addMediaElementToNote = (nodeSlidesContainerEl, { data }) => {
   return videoEl;
 };
 
-const createWave = (blob, waveContainerEl, markers = []) => {
-  // const createWave = (mediaEl, waveContainerEl, markers = []) => {
-
+// const createWave = (blob, waveContainerEl, markers = []) => {
+const createWave = (mediaEl, waveContainerEl, markers = []) => {
   const canvas = document.createElement('canvas');
   canvas.style.visibility = 'collapsed';
   const ctx = canvas.getContext('2d');
@@ -123,10 +120,11 @@ const createWave = (blob, waveContainerEl, markers = []) => {
     responsive: true,
     // waveColor: '#2D2DC5',
     waveColor: gradient,
+    // backend: 'MediaElement',
     plugins: [WaveSurfer.markers.create({ markers })],
   });
-  wavesurfer.loadBlob(blob);
-  // wavesurfer.load(mediaEl);
+  // wavesurfer.loadBlob(blob);
+  wavesurfer.load(mediaEl);
   return wavesurfer;
 };
 

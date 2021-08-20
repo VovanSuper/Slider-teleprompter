@@ -1,5 +1,5 @@
 /*!
- * wavesurfer.js mediasession plugin 5.1.0 (2021-06-20)
+ * wavesurfer.js mediasession plugin 5.2.0 (2021-08-16)
  * https://wavesurfer-js.org
  * @license BSD-3-Clause
  */
@@ -12,7 +12,7 @@
 		exports["WaveSurfer"] = factory();
 	else
 		root["WaveSurfer"] = root["WaveSurfer"] || {}, root["WaveSurfer"]["mediasession"] = factory();
-})(this, function() {
+})(self, function() {
 return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({

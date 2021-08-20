@@ -3,9 +3,11 @@ import { setCurrentSlide } from '../store/actions.js';
 import { readBespokeCurrentSlideIndex, timeFuncs } from './utils.js';
 
 const { getElapsedTime } = timeFuncs;
-// Opt in to slider buttons clicks events
+// Opt in to slider buttons clicks events (including buttons in Presentation mode)
 const nextBtn = document.querySelector('button[data-bespoke-marp-osc="next"]');
 const prevBtn = document.querySelector('button[data-bespoke-marp-osc="prev"]');
+const nextBtnPresenter = document.querySelector('.bespoke-marp-presenter-info-page > button.bespoke-marp-presenter-info-page-next');
+const prevBtnPresenter = document.querySelector('.bespoke-marp-presenter-info-page > button.bespoke-marp-presenter-info-page-prev');
 
 window.addEventListener('keysEvent', (e) => {
   if (!!e) {
@@ -14,19 +16,14 @@ window.addEventListener('keysEvent', (e) => {
 });
 
 function optToSliderButtons() {
-  [nextBtn, prevBtn].forEach(
-    /**
-     *
-     * @param {HTMLButtonElement} btn
-     */
-    (btn) => {
+  [nextBtn, prevBtn, nextBtnPresenter, prevBtnPresenter].forEach((btn) => {
+    !!btn &&
       btn.addEventListener('click', (e) => {
         if (!!e) {
           dispatchCurrentSlideIndex();
         }
       });
-    }
-  );
+  });
 }
 
 let currSlideIdx = undefined;
