@@ -31,12 +31,9 @@ function handleRecording() {
 }
 
 export class Recorder {
-  /** @property @type {MediaStream} stream */
-  stream;
-  /** @property @type {MediaRecorder} mediaRecorder */
-  mediaRecorder;
-  /** @type {Blob|Blob[]} chunks */
-  chunks = [];
+  /** @property @type {MediaStream} stream */ stream;
+  /** @property @type {MediaRecorder} mediaRecorder */ mediaRecorder;
+  /** @type {Blob[]} chunks */ chunks = [];
 
   constructor() {
     if (!('mediaDevices' in navigator)) {

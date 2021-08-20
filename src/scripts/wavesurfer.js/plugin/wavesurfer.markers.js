@@ -149,7 +149,8 @@ var MarkersPlugin = /*#__PURE__*/function () {
         time: params.time,
         label: params.label,
         color: params.color || DEFAULT_FILL_COLOR,
-        position: params.position || DEFAULT_POSITION
+        position: params.position || DEFAULT_POSITION,
+        idx: params.idx
       };
 
       if (params.markerElement) {
@@ -185,43 +186,40 @@ var MarkersPlugin = /*#__PURE__*/function () {
     }
   }, {
     key: "_createPointerSVG",
-    value: function _createPointerSVG(color, position, label) {
+    value: function _createPointerSVG(color, position = 'top', label) {
       var svgNS = "http://www.w3.org/2000/svg";
-      var el = document.createElementNS(svgNS, "svg");
-      var polygon = document.createElementNS(svgNS, "rect");
-      el.setAttribute("viewBox", "0 0 75 15");
-      polygon.setAttribute("id", "polygon");
-      // polygon.setAttribute("stroke", "#979797");
-      polygon.setAttribute("fill", color || '#FD4E4E');
-      // polygon.setAttribute("points", "20 0 40 30 40 80 0 80 0 30");
-      polygon.setAttribute("width", "75")
-      polygon.setAttribute("height", "15")
-      polygon.setAttribute("rx", "7.5")
+      // var el = document.createElementNS(svgNS, "svg");
+      // var polygon = document.createElementNS(svgNS, "rect");
+      // el.setAttribute("viewBox", "0 0 75 15");
+      // polygon.setAttribute("id", "polygon");
+      // // polygon.setAttribute("stroke", "#979797");
+      // polygon.setAttribute("fill", color || '#FD4E4E');
+      // // polygon.setAttribute("points", "20 0 40 30 40 80 0 80 0 30");
+      // polygon.setAttribute("width", "75")
+      // polygon.setAttribute("height", "15")
+      // polygon.setAttribute("rx", "7.5")
 
-      if (position == "top") {
-        polygon.setAttribute("transform", "rotate(180, 20 40)");
-      }
-
-      var textEl = document.createElement('text');
-
-      el.appendChild(polygon);
-      this.style(el, {
-        width: 75 + "px",
-        height: 15 + "px",
-        "min-width": 75 + "px",
-        "margin-right": "5px",
-        "z-index": 4
-      });
+      // if (position == "top") {
+      //   polygon.setAttribute("transform", "rotate(180, 20 40)");
+      // }
+      // el.appendChild(polygon);
+      // this.style(el, {
+      //   width: 75 + "px",
+      //   height: 15 + "px",
+      //   "min-width": 75 + "px",
+      //   "margin-right": "5px",
+      //   "z-index": 4
+      // });
       // return el;
       let svgEl =  document.createElementNS(svgNS ,'svg');
-      svgEl.setAttribute("width", "32");
-      svgEl.setAttribute("height", "7");
+      svgEl.setAttribute("width", "37");
+      svgEl.setAttribute("height", "8");
       svgEl.setAttribute("rx", "2");
-      svgEl.setAttribute("viewBox", "0 0 32 7");
+      svgEl.setAttribute("viewBox", "0 0 37 8");
       
       svgEl.innerHTML = `
-        <rect width="32" height="7" rx="4" fill="#FD4E4E"></rect>
-        <text x="5" y="5" font-family="Montserrat" font-size="6" fill="white"> ${label} </text>
+        <rect width="37" height="8" rx="4" fill="${color}"></rect>
+        <text x="5" y="6" font-family="monospace" font-size="7" fill="white"> ${label} </text>
           `;
       return svgEl;
     }
@@ -232,7 +230,7 @@ var MarkersPlugin = /*#__PURE__*/function () {
 
       var label = marker.label;
       var time = marker.time;
-      var el = document.createElement('marker');
+      var el = document.createElement('marker');    
       el.className = "wavesurfer-marker";
       this.style(el, {
         position: "absolute",
@@ -241,6 +239,9 @@ var MarkersPlugin = /*#__PURE__*/function () {
         overflow: "hidden",
         "flex-direction": marker.position == "top" ? "column-reverse" : "column"
       });
+      
+      el.setAttribute('idx', marker.idx);
+
       var line = document.createElement('div');
       this.style(line, {
         "flex-grow": 1,
@@ -277,7 +278,7 @@ var MarkersPlugin = /*#__PURE__*/function () {
       labelDiv.addEventListener("click", function (e) {
         e.stopPropagation();
 
-        _this2.wavesurfer.setCurrentTime(time);
+        // _this2.wavesurfer.setCurrentTime(time);
 
         _this2.wavesurfer.fireEvent("marker-click", marker, e);
       });

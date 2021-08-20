@@ -1,6 +1,7 @@
 // import WaveSurfer, { create } from 'wavesurfer.js';
 // import * as WaveSurfer from '../wavesurfer.js/dist/wavesurfer.js';
 
+import { addDragHandler } from './utils.js';
 import createNoteCloserBtn from './closer-btn.js';
 
 const getNoteByIndex = (index) => document.querySelector(`.note[idx="${index}"]`);
@@ -13,18 +14,38 @@ const renderNote = (clip, notesEl, rootEl) => {
   let noteSlidesNamesEl = document.createElement('ul');
   let noteClipEl = document.createElement('div');
   if (!!clip.slides?.length) addNoteSlidesList(noteSlidesNamesEl, clip);
-  if (!!clip.data) addMediaElementToNote(noteClipEl, { data: clip.data });
+
   if (!!clip.data) {
+    const videoEl = addMediaElementToNote(noteClipEl, { data: clip.data });
     const surfer = createWave(clip.data, noteElFooter, crateMarkers(clip.slides));
+    surfer.backend;
+    // const surfer = createWave(videoEl, noteElFooter, crateMarkers(clip.slides));
     let wavePlayBtn = document.createElement('button');
     wavePlayBtn.classList.add('btn-wave--play');
-    surfer.on('ready', function () {
-      wavePlayBtn.addEventListener('click', function PlaySurfer() {
-        console.log({ surfer });
-        // if (!!surfer.isPlaying) return surfer.pause();
+    surfer.on('ready', () => {
+      surfer.on(
+        'marker-click',
+        /** @param {Event & {el:Element}} markerClkEv  */ (markerClkEv) => {
+          surfer.stop();
+          let currentMarker = markerClkEv.el;
+          currentMarker.addEventListener('mousemove', (moveEv) => {
+            moveEv.stopPropagation();
+          });
+        }
+      );
+
+      const clipDuration = surfer.getDuration();
+      const { markers } = surfer.markers;
+      const surferRootEl = surfer.container.querySelector('wave > canvas');
+      console.log({ markers, clipDuration, surferRootEl });
+
+      markers.forEach((marker) => addDragHandler(marker.el, surferRootEl, clipDuration, clip.id));
+      wavePlayBtn.addEventListener('click', function PlaySurfer(_e) {
+        // console.log({ surfer });
+        if (!!surfer.isPlaying()) return surfer.pause();
         surfer.play();
+        return () => wavePlayBtn.removeEventListener(PlaySurfer);
       });
-      return () => wavePlayBtn.removeEventListener(PlaySurfer);
     });
 
     noteElFooter.appendChild(wavePlayBtn);
@@ -80,15 +101,17 @@ const addMediaElementToNote = (nodeSlidesContainerEl, { data }) => {
     videoEl.srcObject = video;
   }
   nodeSlidesContainerEl.appendChild(videoEl);
+  return videoEl;
 };
 
 const createWave = (blob, waveContainerEl, markers = []) => {
+  // const createWave = (mediaEl, waveContainerEl, markers = []) => {
   /** @type {HTMLCanvasElement} */
   const canvas = document.createElement('canvas');
   canvas.style.visibility = 'collapsed';
   const ctx = canvas.getContext('2d');
 
-  let gradient = ctx.createLinearGradient(0, 10, 0, 0);
+  let gradient = ctx.createLinearGradient(0, 10, 10, 0);
   gradient.addColorStop(0, '#3030C6');
   gradient.addColorStop(1, '#6767D9');
 
@@ -104,15 +127,18 @@ const createWave = (blob, waveContainerEl, markers = []) => {
     plugins: [WaveSurfer.markers.create({ markers })],
   });
   wavesurfer.loadBlob(blob);
+  // wavesurfer.load(mediaEl);
   return wavesurfer;
 };
 
+/** @param @type{WaveSurfer} */
 const crateMarkers = (slides) =>
   slides.map(({ time, id }) => ({
     time: time / 1000,
     label: `Slide ${id}`,
     color: '#fd4e4e',
     position: 'top',
+    idx: id,
   }));
 
 const clearNoteEls = (notesEl) => {
