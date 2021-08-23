@@ -7,6 +7,9 @@ import { optToSliderButtons, dispatchCurrentSlideIndex } from './helpers/slides.
 
 const rootEl = document.getElementById('root');
 
+import './wavesurfer/wavesurfer.js';
+import './wavesurfer/plugin/wavesurfer.markers.slides.js';
+
 /**
  *
  * @returns {HTMLButtonElement}
