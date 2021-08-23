@@ -96,9 +96,12 @@ export class Recorder {
   }
 
   #_setMedia() {
+    const { clips } = fromStore.getStateSnapshot();
+    const id = clips[clips.length - 1].id
     const { ext, mime } = this.#_getSupportedCodecFileExt();
     const blob = new Blob(this.chunks, { type: mime });
-    fromStore.dispatch(stopRecording({ data: blob, ext }));
+    const file = new File([blob], `Clip-${id}`, { type: mime });
+    fromStore.dispatch(stopRecording({ file, ext }));
     this.chunks = [];
   }
 
@@ -120,7 +123,7 @@ function detectVoiceStart(audioBuffer, samples, threshold) {
   const cumsum = new Float32Array(audioBuffer.length);
 
   if (audioBuffer.length > 0) {
-    let bit = arrayBuffer[0]
+    let bit = arrayBuffer[0];
     cumsum[0] = bit * bit;
     for (let i = 1; i < audioBuffer.length; ++i) {
       bit = arrayBuffer[i];
@@ -128,11 +131,9 @@ function detectVoiceStart(audioBuffer, samples, threshold) {
 
       const start = i - samples;
       if (start < 0) {
-        if (cumsum[i] >= threshold)
-          return 0
+        if (cumsum[i] >= threshold) return 0;
       } else {
-        if (cumsum[i] - cumsum[start] >= threshold)
-          return (start + 1) / audioBuffer.sampleRate;
+        if (cumsum[i] - cumsum[start] >= threshold) return (start + 1) / audioBuffer.sampleRate;
       }
     }
   }
@@ -150,7 +151,7 @@ function detectVoiceEnd(audioBuffer, samples, threshold) {
   const cumsum = new Float32Array(audioBuffer.length);
 
   if (audioBuffer.length > 0) {
-    let bit = arrayBuffer[audioBuffer.length - 1]
+    let bit = arrayBuffer[audioBuffer.length - 1];
     cumsum[audioBuffer.length - 1] = bit * bit;
     for (let i = audioBuffer.length - 2; i >= 0; --i) {
       bit = arrayBuffer[i];
@@ -158,11 +159,9 @@ function detectVoiceEnd(audioBuffer, samples, threshold) {
 
       const end = i + samples;
       if (end >= audioBuffer.length) {
-        if (cumsum[i] >= threshold)
-          return audioBuffer.length - 1;
+        if (cumsum[i] >= threshold) return audioBuffer.length - 1;
       } else {
-        if (cumsum[i] - cumsum[end] >= threshold)
-          return end / audioBuffer.sampleRate;
+        if (cumsum[i] - cumsum[end] >= threshold) return end / audioBuffer.sampleRate;
       }
     }
   }

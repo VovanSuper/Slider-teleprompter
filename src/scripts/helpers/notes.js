@@ -12,7 +12,7 @@ const renderNote = (clip, notesEl, rootEl) => {
   let noteClipEl = document.createElement('div');
   if (!!clip.slides?.length) addNoteSlidesList(noteSlidesNamesEl, clip);
 
-  if (!!clip.data) {
+  if (!!clip.file) {
     const videoEl = addMediaElementToNote(noteClipEl, { ...clip });
     // const surfer = createWave(clip.data, noteElFooter, crateMarkers(clip.slides));
     const surfer = createWave(videoEl, noteElFooter, crateMarkers(clip.slides));
@@ -164,9 +164,11 @@ const renderNoteSlideCurrentImg = (imgEl, imgUrl) => {
   imgEl.src = imgUrl;
 };
 
-const addMediaElementToNote = (nodeSlidesContainerEl, { data, id, ...rest }) => {
+const addMediaElementToNote = (nodeSlidesContainerEl, { file, id, ...rest }) => {
   // const video = window.URL.createObjectURL(data);
-  const video = URL.createObjectURL(new File([data], `Clip-${id}`));
+  // const video = URL.createObjectURL(new File([data], `Clip-${id}`));
+
+  const video = URL.createObjectURL(file);
   const videoEl = document.createElement('video');
   videoEl.controls = true;
   try {
@@ -218,4 +220,4 @@ const clearNoteEls = (notesEl) => {
   !!notesEl.children.length && Array.from(notesEl.children).forEach((child) => notesEl.removeChild(child));
 };
 
-export { getNoteByIndex, renderNote, renderClips };
+export { getNoteByIndex, renderClips };

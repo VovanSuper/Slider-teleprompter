@@ -154,3 +154,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 {"mode":"full","isActive":false}
+
+src/assets
+src/index.html
+slides/Teleprompter.html

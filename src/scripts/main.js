@@ -41,10 +41,10 @@ function handleDownloadClick() {
 
     await Promise.all(
       // allRecs.map(async ({ file, slides, id, ext }) => {
-      clips.map(async ({ id, slides, data, ext }) => {
+      clips.map(async ({ id, slides, file, ext }) => {
         // let fileHandle = await window.showSaveFilePicker(audiofileOpts);
 
-        const file = new File([data], `Clip-${id}`);
+        // const file = new File([data], `Clip-${id}`);
         let fileHandle = await dirHandler.getFileHandle(`Clip-${id}${ext}`, { create: true });
         const writable = await fileHandle.createWritable();
 
