@@ -27,7 +27,6 @@ function optToSliderButtons() {
 }
 
 let currSlideIdx = undefined;
-let unloadedSlideImgs = new Map();
 
 function dispatchCurrentSlideIndex() {
   readBespokeCurrentSlideIndex()
@@ -61,10 +60,8 @@ const getSlideImgById = (id) => {
   const currentSlideImg = p && p.querySelector(`svg > foreignObject > section[id="${id}"] > p > img`);
   const imgUrl = (currentSlideImg && currentSlideImg.src) || null;
   if (!!!imgUrl) {
-    unloadedSlideImgs.set(id, undefined);
     setTimeout(() => {
       const url = getSlideImgById(id);
-      if (!!!url) throw new Error('Unable to handle the image URL ..');
       console.log({ url });
     }, 250);
   }
