@@ -5,8 +5,6 @@ import dispatchKeyDown from './helpers/keydown-dispatch.js';
 import { getStatusBoxEl } from './helpers/utils.js';
 import { optToSliderButtons, dispatchCurrentSlideIndex } from './helpers/slides.js';
 
-import('./bespoke_generated.js');
-
 const rootEl = document.getElementById('root');
 
 /**
