@@ -13,7 +13,7 @@ export default (state, { action: { type }, payload }) => {
                 clip.id === state.clips.length && payload.time
                   ? {
                       ...clip,
-                      slides: clip.slides.concat({ id: payload.id, time: payload.time }),
+                      slides: clip.slides.concat({ id: payload.id, time: payload.time, imgUrl: payload.imgUrl }),
                     }
                   : { ...clip }
               ),
@@ -35,7 +35,7 @@ export default (state, { action: { type }, payload }) => {
         ...state,
         recording: false,
         timer: null,
-        clips: state.clips.map((clip) => (clip.id !== state.clips.length ? { ...clip } : { ...clip, data: payload.data })),
+        clips: state.clips.map((clip) => (clip.id !== state.clips.length ? { ...clip } : { ...clip, ...payload })),
       };
 
     case actionTypes.setTimer:
@@ -49,6 +49,19 @@ export default (state, { action: { type }, payload }) => {
         ...state,
         timer: undefined,
         clips: state.clips.filter((clip) => payload.id !== clip.id),
+      };
+
+    case actionTypes.updateRecordTimePoint:
+      return {
+        ...state,
+        clips: state.clips.map((clip) =>
+          clip.id === payload.clipId
+            ? {
+                ...clip,
+                slides: clip.slides.map((slide, i) => (i === payload.slideId ? { ...slide, time: payload.time } : { ...slide })),
+              }
+            : clip
+        ),
       };
 
     default:

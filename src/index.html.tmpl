@@ -5,23 +5,14 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/styles/style.css">
   <title>Slider Teleprompter</title>
+  <link rel="stylesheet" href="/styles/style.css">
 
-  <script src="./scripts/bespoke.js"></script>
   <script>
-    (function () {
-      console.log('Attaching')
-      document.addEventListener('keydown', e => {
-        let keysEvent = new CustomEvent('keysEvent', {
-          detail: {
-            originalEvent: e
-          }
-        });
-        window.dispatchEvent(keysEvent);
-      });
-    })();
+
   </script>
+  <script src="/scripts/wavesurfer/wavesurfer.js"></script>
+  <script src="/scripts/wavesurfer/plugin/wavesurfer.markers.slides.js"></script>
 
   <script type="module">
     import('/scripts/main.js').then(mod => mod.default())
