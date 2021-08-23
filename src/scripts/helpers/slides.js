@@ -59,12 +59,12 @@ const getSlideImgById = (id) => {
   const p = document.getElementById('p');
   const currentSlideImg = p && p.querySelector(`svg > foreignObject > section[id="${id}"] > p > img`);
   const imgUrl = (currentSlideImg && currentSlideImg.src) || null;
-  if (!!!imgUrl) {
-    setTimeout(() => {
-      const url = getSlideImgById(id);
-      console.log({ url });
-    }, 250);
-  }
+  // if (!!!imgUrl) {
+  //   setTimeout(() => {
+  //     const url = getSlideImgById(id);
+  //     console.log({ url });
+  //   }, 250);
+  // }
   console.log({ p, currentSlideImg, imgUrl });
   return imgUrl;
 };
