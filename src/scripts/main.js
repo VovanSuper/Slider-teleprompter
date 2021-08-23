@@ -1,6 +1,7 @@
 import fromStore from './store/store.js';
 import { renderClips } from './helpers/notes.js';
 import handleRecording from './helpers/recorder.js';
+import dispatchKeyDown from './helpers/keydown-dispatch.js';
 import { getStatusBoxEl } from './helpers/utils.js';
 import { optToSliderButtons, dispatchCurrentSlideIndex } from './helpers/slides.js';
 
@@ -13,6 +14,7 @@ const rootEl = document.getElementById('root');
 const getDownloadBtn = () => document.querySelector('.btn-download');
 
 export default function () {
+  dispatchKeyDown();
   dispatchCurrentSlideIndex();
   optToSliderButtons();
   handleRecording();

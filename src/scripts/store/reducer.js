@@ -13,7 +13,7 @@ export default (state, { action: { type }, payload }) => {
                 clip.id === state.clips.length && payload.time
                   ? {
                       ...clip,
-                      slides: clip.slides.concat({ id: payload.id, time: payload.time }),
+                      slides: clip.slides.concat({ id: payload.id, time: payload.time, imgUrl: payload.imgUrl }),
                     }
                   : { ...clip }
               ),

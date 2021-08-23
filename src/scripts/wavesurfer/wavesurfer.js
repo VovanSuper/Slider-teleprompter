@@ -6538,4 +6538,3 @@ module.exports = debounce;
 /******/ })()
 ;
 });
-//# sourceMappingURL=wavesurfer.js.map

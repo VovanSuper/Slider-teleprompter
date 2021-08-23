@@ -1,7 +1,12 @@
 /*!
+ * The Mod from:
+ *
  * wavesurfer.js markers plugin 5.1.0 (2021-06-20)
  * https://wavesurfer-js.org
  * @license BSD-3-Clause
+ * 
+ * Modified for Slider-Teleprompter project 
+ * Vladimir Ovsyukov (vovansuper@mail.ru)
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -12,7 +17,7 @@
 		exports["WaveSurfer"] = factory();
 	else
 		root["WaveSurfer"] = root["WaveSurfer"] || {}, root["WaveSurfer"]["markers"] = factory();
-})(this, function() {
+})(globalThis, function() {
 return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
@@ -122,6 +127,7 @@ var MarkersPlugin = /*#__PURE__*/function () {
         this._onReady();
       } else {
         this.wavesurfer.once('ready', this._onReady);
+        this.wavesurfer.once('waveform-ready', this._onReady);
         this.wavesurfer.once('backend-created', this._onBackendCreated);
       }
     }
@@ -129,6 +135,7 @@ var MarkersPlugin = /*#__PURE__*/function () {
     key: "destroy",
     value: function destroy() {
       this.wavesurfer.un('ready', this._onReady);
+      this.wavesurfer.un('waveform-ready', this._onReady);
       this.wavesurfer.un('backend-created', this._onBackendCreated);
       this.wavesurfer.un('zoom', this._onResize);
       window.removeEventListener('resize', this._onResize, true);
@@ -399,4 +406,3 @@ module.exports = exports.default;
 /******/ })()
 ;
 });
-//# sourceMappingURL=wavesurfer.markers.js.map

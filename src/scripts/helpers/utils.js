@@ -4,7 +4,7 @@ import { setTimer, updateClipTimePoint } from '../store/actions.js';
 const MARP_BESPOKE_KEY_FROM_HISTORY = window.history?.state?.marpBespokeSyncKey;
 const currentSlideLSSubKey = !!MARP_BESPOKE_KEY_FROM_HISTORY ? `bespoke-marp-sync-${MARP_BESPOKE_KEY_FROM_HISTORY}` : 'bespoke-marp-sync-';
 
-// const getCurrentBespokeIndex = () => bespoke.from('#p').slide();
+
 
 const getBespokeLSKey = () => {
   for (let i = 0; i < localStorage.length; i++) {
@@ -56,6 +56,15 @@ export const timeFuncs = {
   getElapsedTime: () => fromStore.getStateSnapshot().timer?.getDiffMs() || null,
 };
 
+export const playBtnPlay = (wavePlayBtn) => {
+  wavePlayBtn.classList.add('btn-wave--play');
+  wavePlayBtn.classList.remove('btn-wave--pause');
+};
+export const playBtnPause = (wavePlayBtn) => {
+  wavePlayBtn.classList.add('btn-wave--pause');
+  wavePlayBtn.classList.remove('btn-wave--play');
+};
+
 /**@param {HTMLElement} el  @param {HTMLElement} rootEl @param {number} clipDuration @param {number} clipId  */
 export const addDragHandler = (el, rootEl, clipDuration, clipId) => {
   let isDown = false;
@@ -84,14 +93,14 @@ export const addDragHandler = (el, rootEl, clipDuration, clipId) => {
     e.stopImmediatePropagation();
 
     isDown = false;
-    newTime = newTime <= 0 ? 0 : newTime;
+    newTime = newTime <= 0 ? 10 : newTime;
     {
       // Remove handlers, as the page to be re-rendered at dispatch ...
       el.removeEventListener('mousedown', OnMouseDown, true);
       document.removeEventListener('mouseup', OnMouseUp, true);
       document.removeEventListener('mousemove', OnMouseMove, true);
     }
-    return fromStore.dispatch(updateClipTimePoint({ clipId, slideId, time: newTime }));
+    return setTimeout(() => fromStore.dispatch(updateClipTimePoint({ clipId, slideId, time: newTime })), 10);
   }
 
   /**@param {MouseEvent}e */ function OnMouseMove(e) {

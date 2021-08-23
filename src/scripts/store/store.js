@@ -21,8 +21,9 @@ class Store {
   }
 
   dispatch(actionParams) {
+    if (!!!actionParams.action) return;
     const newState = this.currentReducer(this.getStateSnapshot(), actionParams);
-    // if (this.#_sameState(newState)) return;
+    if (this.#_sameState(newState)) return;
     this.#_lastActionInvoked = actionParams.action;
     this.#_setState(newState);
     !!this.#_subscribers.length && this.#_subscribers.forEach((_sub) => _sub(this.getStateSnapshot()));

@@ -27,14 +27,49 @@ function optToSliderButtons() {
 }
 
 let currSlideIdx = undefined;
+let unloadedSlideImgs = new Map();
 
 function dispatchCurrentSlideIndex() {
-  readBespokeCurrentSlideIndex().then(({ id }) => {
-    if (!!!currSlideIdx || currSlideIdx !== id) {
-      fromStore.dispatch(setCurrentSlide({ id, time: getElapsedTime() }));
-    }
-    currSlideIdx = id;
-  });
+  readBespokeCurrentSlideIndex()
+    .then(({ id }) => {
+      if (!!!currSlideIdx || currSlideIdx !== id) {
+        const imgUrl = getSlideImgById(id);
+        fromStore.dispatch(setCurrentSlide({ id, time: getElapsedTime(), imgUrl }));
+      }
+      currSlideIdx = id;
+    })
+    .catch((e) => console.error(e))
+    .finally(() => {
+      const { clips } = fromStore.getStateSnapshot();
+      clips.forEach((clip) => {
+        clip.slides.forEach((slide) => {
+          if (!slide.imgUrl) {
+            console.log('NO URL FOR slide::: ', slide);
+            setTimeout(() => {
+              const url = getSlideImgById(slide.id);
+              console.log({ newURL: url });
+              slide.imgUrl = url;
+            }, 500);
+          }
+        });
+      });
+    });
 }
+
+const getSlideImgById = (id) => {
+  const p = document.getElementById('p');
+  const currentSlideImg = p && p.querySelector(`svg > foreignObject > section[id="${id}"] > p > img`);
+  const imgUrl = (currentSlideImg && currentSlideImg.src) || null;
+  if (!!!imgUrl) {
+    unloadedSlideImgs.set(id, undefined);
+    setTimeout(() => {
+      const url = getSlideImgById(id);
+      if (!!!url) throw new Error('Unable to handle the image URL ..');
+      console.log({ url });
+    }, 250);
+  }
+  console.log({ p, currentSlideImg, imgUrl });
+  return imgUrl;
+};
 
 export { optToSliderButtons, dispatchCurrentSlideIndex };
