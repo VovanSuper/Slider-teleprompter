@@ -118,3 +118,63 @@ export class Recorder {
     }
   }
 }
+
+// Returns the start time (in seconds) when the voice reaches a required energy threshold to be considered not silent.
+// If no suitable start time is found, it returns null
+function detectVoiceStart(audioBuffer, samples, threshold) {
+  // Square the threshold to compare to the square of the audio energy so there would be no need for a square root.
+  // Also normalise it to the number of samples.
+  threshold = threshold * threshold * samples;
+  const arrayBuffer = audioBuffer.getChannelData(0);
+  const cumsum = new Float32Array(audioBuffer.length);
+
+  if (audioBuffer.length > 0) {
+    let bit = arrayBuffer[0]
+    cumsum[0] = bit * bit;
+    for (let i = 1; i < audioBuffer.length; ++i) {
+      bit = arrayBuffer[i];
+      cumsum[i] = bit * bit + cumsum[i - 1];
+
+      const start = i - samples;
+      if (start < 0) {
+        if (cumsum[i] >= threshold)
+          return 0
+      } else {
+        if (cumsum[i] - cumsum[start] >= threshold)
+          return (start + 1) / audioBuffer.sampleRate;
+      }
+    }
+  }
+
+  return null;
+}
+
+// Returns the end time (in seconds) when the voice reaches a required energy threshold to be considered not silent.
+// If no suitable end time is found, it returns null
+function detectVoiceEnd(audioBuffer, samples, threshold) {
+  // Square the threshold to compare to the square of the audio energy so there would be no need for a square root.
+  // Also normalise it to the number of samples.
+  threshold = threshold * threshold * samples;
+  const arrayBuffer = audioBuffer.getChannelData(0);
+  const cumsum = new Float32Array(audioBuffer.length);
+
+  if (audioBuffer.length > 0) {
+    let bit = arrayBuffer[audioBuffer.length - 1]
+    cumsum[audioBuffer.length - 1] = bit * bit;
+    for (let i = audioBuffer.length - 2; i >= 0; --i) {
+      bit = arrayBuffer[i];
+      cumsum[i] = bit * bit + cumsum[i + 1];
+
+      const end = i + samples;
+      if (end >= audioBuffer.length) {
+        if (cumsum[i] >= threshold)
+          return audioBuffer.length - 1;
+      } else {
+        if (cumsum[i] - cumsum[end] >= threshold)
+          return end / audioBuffer.sampleRate;
+      }
+    }
+  }
+
+  return null;
+}
