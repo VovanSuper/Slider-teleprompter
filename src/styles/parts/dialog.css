@@ -33,6 +33,7 @@
   transform: translateY(-50%);
   max-height: 50%;
   max-width: 80%;
+  z-index: 9999;
 }
 
 .dialog-caption {

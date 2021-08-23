@@ -25,5 +25,3 @@ jobs:
             Changes in this Release
             - Extended library functionality
             - Version bump to $RELEASE_VERSION
-          draft: false
-          prerelease: true

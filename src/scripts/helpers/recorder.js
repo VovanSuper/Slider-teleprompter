@@ -31,9 +31,9 @@ function handleRecording() {
 }
 
 export class Recorder {
-  stream = null;
-  mediaRecorder = null;
-  chunks = [];
+  /** @property @type {MediaStream} stream */ stream;
+  /** @property @type {MediaRecorder} mediaRecorder */ mediaRecorder;
+  /** @type {Blob[]} chunks */ chunks = [];
 
   constructor() {
     if (!('mediaDevices' in navigator)) {
@@ -47,35 +47,23 @@ export class Recorder {
   }
 
   async start() {
-    // this.#_getSupportedMimes();
     try {
       fromStore.dispatch(startRecording());
       setStoreTimer(true);
-      this.stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-      const tracks = this.stream.getAudioTracks();
-      // console.log('Tracks :: ', tracks);
-      // console.log('Capabilities :: ', tracks[0].getCapabilities());
+      this.stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+      const audioTrack = this.stream.getAudioTracks();
 
-      this.mediaRecorder = new MediaRecorder(this.stream, { mimeType: 'audio/webm;codecs=opus' });
-      this.mediaRecorder.onstart = (e) => console.log('Started recording');
-      this.mediaRecorder.onstop = (e) => {
-        const audioData = this.#_setAudio();
+      console.log({ audioTrack });
+
+      this.mediaRecorder = new MediaRecorder(this.stream, { mimeType: this.#_getSupportedCodecFileExt().mime });
+      this.mediaRecorder.onstart = (_e) => console.log('Started recording');
+      this.mediaRecorder.onstop = (_e) => {
+        this.#_setMedia();
       };
       this.mediaRecorder.ondataavailable = (e) => {
-        // console.log('Data AVAILABLE::: ', e.data);
-
         if (e.data.size > 0) {
           this.chunks.push(e.data);
         }
-        // const audioData = this.#_setAudio();
-
-        // const { currentSlide: id, notes, notesLength } = fromStore.getStateSnapshot();
-
-        // if (!!!notesLength || !!!notes[id]) {
-        //   fromStore.dispatch(addNote({ note: { title: `Slide ${id}`, id, content: [audioData] } }));
-        // } else {
-        //   fromStore.dispatch(addContentToNote({ id, content: audioData }));
-        // }
       };
 
       this.mediaRecorder.start();
@@ -83,7 +71,7 @@ export class Recorder {
       return this.stream;
     } catch (error) {
       if (error.name === 'ConstraintNotSatisfiedError') {
-        this.#_errorMsg('Audio  is not supported by your device.');
+        this.#_errorMsg('Video  is not supported by your device.');
       } else if (error.name === 'PermissionDeniedError') {
         this.#_errorMsg('Permissions have not been granted to use your microphone, you need to allow the page access to your devices');
       }
@@ -92,26 +80,29 @@ export class Recorder {
   }
 
   handleStop() {
-    console.log('The Recorder stopping ...');
-    if (!!this.mediaRecorder && this.mediaRecorder.start !== 'inactive') {
-      this.mediaRecorder.stop();
-    }
+    if (this.#_getState() !== 'inactive') this.mediaRecorder.stop();
   }
 
-  #_getSupportedMimes() {
-    let types = ['audio/webm', 'audio/webm;codecs=opus', 'audio/ogg;codecs=opus'];
-    for (let i in types) {
-      console.log('Is ' + types[i] + ' supported? ' + (MediaRecorder.isTypeSupported(types[i]) ? 'Maybe!' : 'Nope :('));
+  #_getSupportedCodecFileExt() {
+    let types = ['video/webm;codecs=vp9,opus', 'video/webm'];
+    for (let mime of types) {
+      if (MediaRecorder.isTypeSupported(mime)) return { mime, ext: '.webm' };
     }
+    return { mime: 'video/mp4', ext: '.mp4' };
   }
 
-  #_setAudio() {
-    const blob = new Blob(this.chunks, { type: 'audio/webm;codecs=opus' });
-    fromStore.dispatch(stopRecording({ data: blob }));
+  #_getState() {
+    return this.mediaRecorder?.state; // inactive, recording, or paused
+  }
+
+  #_setMedia() {
+    const { ext, mime } = this.#_getSupportedCodecFileExt();
+    const blob = new Blob(this.chunks, { type: mime });
+    fromStore.dispatch(stopRecording({ data: blob, ext }));
     this.chunks = [];
   }
 
-  #_errorMsg(msg, error) {
+  #_errorMsg(msg, error = undefined) {
     getStatusBoxEl().innerHTML += '<p>' + msg + '</p>';
     if (typeof error !== 'undefined') {
       console.error(error);
