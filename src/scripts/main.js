@@ -57,7 +57,7 @@ function handleDownloadClick() {
 				meta = {
 					clips: meta.clips.concat({
 						id,
-						slides,
+						slides: slides.map(({ time, id, ...rest }) => ({ time, id })),
 						// audio: audioBas64,
 						file: `${file.name}${ext}`,
 					}),
