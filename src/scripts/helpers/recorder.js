@@ -51,21 +51,12 @@ export class Recorder {
 			setStoreTimer(true);
 			this.stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
 			this.tracks = this.stream.getTracks();
-			const audioTrack = this.stream.getAudioTracks()[0];
-			console.log({ audioTrack });
-
-			audioTrack.addEventListener('ended', audioEndedEv => {
-				console.log('Ended AUDIO !!!!!!!!!!!!!!!!!');
-				console.log({ audioEndedEv });
-			});
 
 			this.mediaRecorder = new MediaRecorder(this.stream, { mimeType: this.#_getSupportedCodecFileExt().mime });
 			this.mediaRecorder.onstart = _e => console.log('Started recording');
 			this.mediaRecorder.onstop = _e => {
 				this.#_setMedia();
-				// audioTrack.stop();
 				this.tracks.forEach(track => track.readyState !== 'ended' && track.stop());
-				console.log('Audio Track status :::::::::: ', audioTrack.readyState);
 			};
 			this.mediaRecorder.ondataavailable = e => {
 				if (e.data.size > 0) {
@@ -74,7 +65,6 @@ export class Recorder {
 			};
 
 			this.mediaRecorder.start();
-
 			return this.stream;
 		} catch (error) {
 			if (error.name === 'ConstraintNotSatisfiedError') {
@@ -108,6 +98,23 @@ export class Recorder {
 		const { ext, mime } = this.#_getSupportedCodecFileExt();
 		const blob = new Blob(this.chunks, { type: mime });
 		const file = new File([blob], `Clip-${id}`, { type: mime });
+
+		let audioCtx = new AudioContext();
+		blob.arrayBuffer().then(arrBuf => {
+			console.log({ arrBuf });
+
+			audioCtx.decodeAudioData(arrBuf).then(decodedData => {
+				// const { sampleRate, destination, state } = audioCtx;
+				// console.log({ sampleRate, destination, state });
+				// decodedData.
+				let floatArr = decodedData.getChannelData(0);
+				console.log({ floatArr });
+
+				// const voiceEnd = detectVoiceEnd(decodedData, 2, 0.0010);
+				// console.log({ voiceEnd });  	
+			});
+		});
+
 		fromStore.dispatch(stopRecording({ file, ext }));
 		this.chunks = [];
 	}
@@ -124,7 +131,7 @@ export class Recorder {
 // If no suitable start time is found, it returns null
 function detectVoiceStart(audioBuffer, samples, threshold) {
 	// Square the threshold to compare to the square of the audio energy so there would be no need for a square root.
-	// Also normalise it to the number of samples.
+	// Also normalize it to the number of samples.
 	threshold = threshold * threshold * samples;
 	const arrayBuffer = audioBuffer.getChannelData(0);
 	const cumsum = new Float32Array(audioBuffer.length);
@@ -152,7 +159,7 @@ function detectVoiceStart(audioBuffer, samples, threshold) {
 // If no suitable end time is found, it returns null
 function detectVoiceEnd(audioBuffer, samples, threshold) {
 	// Square the threshold to compare to the square of the audio energy so there would be no need for a square root.
-	// Also normalise it to the number of samples.
+	// Also normalize it to the number of samples.
 	threshold = threshold * threshold * samples;
 	const arrayBuffer = audioBuffer.getChannelData(0);
 	const cumsum = new Float32Array(audioBuffer.length);
@@ -166,9 +173,15 @@ function detectVoiceEnd(audioBuffer, samples, threshold) {
 
 			const end = i + samples;
 			if (end >= audioBuffer.length) {
-				if (cumsum[i] >= threshold) return audioBuffer.length - 1;
+				if (cumsum[i] >= threshold) {
+					const result = audioBuffer.length - 1;
+					return result;
+				}
 			} else {
-				if (cumsum[i] - cumsum[end] >= threshold) return end / audioBuffer.sampleRate;
+				if (cumsum[i] - cumsum[end] >= threshold) {
+					const result = end / audioBuffer.sampleRate;
+					return result;
+				}
 			}
 		}
 	}
