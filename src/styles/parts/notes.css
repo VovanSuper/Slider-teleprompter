@@ -68,12 +68,8 @@
 }
 
 .notes .note-content > ul > li {
-<<<<<<< HEAD
   position: relative;
   max-width: 10rem;
-=======
-	position: relative;
->>>>>>> main
 }
 
 .notes .note-content > .note-media > video {
