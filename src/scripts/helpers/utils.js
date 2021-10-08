@@ -52,14 +52,15 @@ export const timeFuncs = {
 	getElapsedTime: () => fromStore.getStateSnapshot().timer?.getDiffMs() || null,
 };
 
-export const playBtnPlay = wavePlayBtn => {
-	wavePlayBtn.classList.add('btn-wave--play');
+export const playBtnToggleIcon = /** @param {HTMLButtonElement} wavePlayBtn */ wavePlayBtn => {
+	wavePlayBtn.classList.toggle('btn-wave--pause');
+	wavePlayBtn.classList.toggle('btn-wave--play');
+};
+
+export const playBtnSetInitial = wavePlayBtn => {
 	wavePlayBtn.classList.remove('btn-wave--pause');
-};
-export const playBtnPause = wavePlayBtn => {
-	wavePlayBtn.classList.add('btn-wave--pause');
-	wavePlayBtn.classList.remove('btn-wave--play');
-};
+	wavePlayBtn.classList.add('btn-wave--play');
+}
 
 /**@param {HTMLElement} el  @param {HTMLElement} rootEl @param {number} clipDuration @param {number} clipId  */
 export const addDragHandler = (el, rootEl, clipDuration, clipId) => {
@@ -132,7 +133,7 @@ export const handleAudioData = async file => {
 	return { voiceStart, voiceEnd };
 };
 
-// Returns the start time (in seconds) when the voice reaches a required energy threshold to be considered not silent.
+// Returns the start time (in milliseconds) when the voice reaches a required energy threshold to be considered not silent.
 // If no suitable start time is found, it returns null
 function detectVoiceStart(audioBuffer, samples, threshold) {
 	// Square the threshold to compare to the square of the audio energy so there would be no need for a square root.
@@ -152,7 +153,7 @@ function detectVoiceStart(audioBuffer, samples, threshold) {
 			if (start < 0) {
 				if (cumsum[i] >= threshold) return 0;
 			} else {
-				if (cumsum[i] - cumsum[start] >= threshold) return (start + 1) / audioBuffer.sampleRate;
+				if (cumsum[i] - cumsum[start] >= threshold) return Math.round(1000 * ((start + 1) / audioBuffer.sampleRate));
 			}
 		}
 	}
@@ -160,7 +161,7 @@ function detectVoiceStart(audioBuffer, samples, threshold) {
 	return null;
 }
 
-// Returns the end time (in seconds) when the voice reaches a required energy threshold to be considered not silent.
+// Returns the end time (in milliseconds) when the voice reaches a required energy threshold to be considered not silent.
 // If no suitable end time is found, it returns null
 function detectVoiceEnd(audioBuffer, samples, threshold) {
 	// Square the threshold to compare to the square of the audio energy so there would be no need for a square root.
@@ -180,12 +181,12 @@ function detectVoiceEnd(audioBuffer, samples, threshold) {
 			if (end >= audioBuffer.length) {
 				if (cumsum[i] >= threshold) {
 					const result = audioBuffer.length - 1;
-					return result;
+					return Math.round(1000 * result);
 				}
 			} else {
 				if (cumsum[i] - cumsum[end] >= threshold) {
 					const result = end / audioBuffer.sampleRate;
-					return result;
+					return Math.round(1000 * result);
 				}
 			}
 		}

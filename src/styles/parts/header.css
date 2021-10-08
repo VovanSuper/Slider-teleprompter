@@ -33,7 +33,7 @@
 	vertical-align: middle;
 	width: 10rem;
 	height: 4rem;
-	color: white;
+	color: var(--color-white);
 	position: relative;
 }
 

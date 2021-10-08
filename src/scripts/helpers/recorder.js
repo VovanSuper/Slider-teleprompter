@@ -1,5 +1,5 @@
 import fromStore from '../store/store.js';
-import { addVoiceStartEndInRecording, startRecording, stopRecording } from '../store/actions.js';
+import { startRecording, stopRecording } from '../store/actions.js';
 import { getStatusBoxEl } from './utils.js';
 import { handleAudioData, timeFuncs } from '../helpers/utils.js';
 
@@ -101,8 +101,7 @@ export class Recorder {
 
 		const { voiceEnd, voiceStart } = await handleAudioData(file);
 		console.log({ voiceEnd, voiceStart });
-		fromStore.dispatch(stopRecording({ file, ext }));
-		fromStore.dispatch(addVoiceStartEndInRecording({ voiceStart, voiceEnd, id }));
+		fromStore.dispatch(stopRecording({ file, ext, voiceStart, voiceEnd }));
 		this.chunks = [];
 	}
 
