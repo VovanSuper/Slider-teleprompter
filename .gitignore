@@ -158,3 +158,4 @@ $RECYCLE.BIN/
 src/assets
 src/index.html
 slides/Teleprompter.html
+**/*.rtf
