@@ -64,6 +64,20 @@ export default (state, { action: { type }, payload }) => {
 				),
 			};
 
+		case actionTypes.addRecordVoiceStartEnd:
+			return {
+				...state,
+				clips: state.clips.map(clip =>
+					clip.id === payload.id
+						? {
+								...clip,
+								voiceStart: payload.voiceStart,
+								voiceEnd: payload.voiceEnd,
+						  }
+						: clip
+				),
+			};
+
 		default:
 			return state;
 	}

@@ -1,7 +1,13 @@
-import { addDragHandler, playBtnPause, playBtnPlay } from './utils.js';
+import { addDragHandler } from './utils.js';
 import createNoteCloserBtn from './closer-btn.js';
 
 const getNoteByIndex = index => document.querySelector(`.note[idx="${index}"]`);
+
+const renderClips = ({ clips }, rootEl) => {
+	const notesEl = document.querySelector('.notes');
+	clearNoteEls(notesEl);
+	clips.forEach((clip, i) => renderNote(clip, notesEl, rootEl));
+};
 
 const renderNote = (clip, notesEl, rootEl) => {
 	let noteEl = document.createElement('section');
@@ -115,12 +121,6 @@ const renderNote = (clip, notesEl, rootEl) => {
 	notesEl.appendChild(noteEl);
 
 	// return () =>
-};
-
-const renderClips = ({ clips }, rootEl) => {
-	const notesEl = document.querySelector('.notes');
-	clearNoteEls(notesEl);
-	clips.forEach((clip, i) => renderNote(clip, notesEl, rootEl));
 };
 
 const addNoteSlidesList = (noteContentUl, clip) => {
