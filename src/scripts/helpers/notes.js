@@ -21,7 +21,8 @@ const renderNote = (clip, notesEl, rootEl) => {
 	if (!!clip.file) {
 		const videoEl = addMediaElementToNote(noteClipEl, { ...clip });
 		// const surfer = createWave(clip.data, noteElFooter, crateMarkers(clip.slides));
-		const surfer = createWave(videoEl, noteElFooter, createSlidesMarkers(clip.slides));
+		const markers = !!clip.voiceEnd ? [...createSlidesMarkers(clip.slides)].concat(createEndMarker({ voiceEnd: clip.voiceEnd })) : createSlidesMarkers(clip.slides);
+		const surfer = createWave(videoEl, noteElFooter, markers);
 		let wavePlayBtn = document.createElement('button');
 		playBtnSetInitial(wavePlayBtn);
 
@@ -213,11 +214,11 @@ const createWave = (mediaEl, waveContainerEl, markers = []) => {
 };
 
 const createSlidesMarkers = slides => createMarkers(slides.map(slide => ({ idx: slide.id, position: 'top', color: 'var(--wave-marker-color)', label: `Slide ${slide.id}`, time: slide.time / 1000 })));
-const createEndMarker = ({ voiceEnd }) => createMarkers({ position: 'top', color: 'var(--wave-end-marker-color)', label: 'END', time: voiceEnd / 1000 });
+const createEndMarker = ({ voiceEnd }) => createMarkers({ position: 'top', color: 'var(--wave-end-marker-color)', label: 'End', time: voiceEnd / 1000 });
 
 /** @param {Array<object>} markers */
 const createMarkers = markers => {
-	const getMarker = ({ time, idx = undefined, index = undefined, label = 'END', color = 'var(--wave-end-marker-color)', position = 'top' }) => ({
+	const getMarker = ({ time, idx = undefined, index = undefined, label = 'End', color = 'var(--wave-end-marker-color)', position = 'top' }) => ({
 		time,
 		idx,
 		label,
