@@ -227,7 +227,7 @@ var MarkersPlugin = /*#__PURE__*/function () {
       
       svgEl.innerHTML = `
         <rect width="37" height="8" rx="4" fill="${color}"></rect>
-        <text x="5" y="6" font-family="monospace" font-size="7" fill="white"> ${label} </text>
+        <text x="${label === 'End' ? '12' : '5'}" y="6" font-family="monospace" font-size="7" fill="white"> ${label} </text>
           `;
       return svgEl;
     }

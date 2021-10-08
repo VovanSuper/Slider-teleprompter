@@ -1,9 +1,17 @@
 :root {
+
+  --color-white: #fff;
+  --color-black: #000;
+
   --bg-color: #c7c7c7;
   --note-bg-color: #ffe2f2;
-  --save-btn-bg-color: #f15dad;
+  --modal-bg-color: #f08080;
+  --save-btn-bg-color: #e41c4e;
   --wave-marker-color: #fd4e4e;
   --wave-color: #2D2DC5;
   --wave-progress-color: #fff54d;
-  --wave-end-color: #94b731;
+  --wave-end-marker-color: #94b731;
+
+  --marker-stop1: #2D2DC5;
+	--marker-stop2: #3091c6;
 }

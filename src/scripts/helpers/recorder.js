@@ -1,7 +1,7 @@
 import fromStore from '../store/store.js';
 import { startRecording, stopRecording } from '../store/actions.js';
 import { getStatusBoxEl } from './utils.js';
-import { timeFuncs } from '../helpers/utils.js';
+import { handleAudioData, timeFuncs } from '../helpers/utils.js';
 
 const { setStoreTimer } = timeFuncs;
 
@@ -92,30 +92,16 @@ export class Recorder {
 		return this.mediaRecorder?.state; // inactive, recording, or paused
 	}
 
-	#_setMedia() {
+	async #_setMedia() {
 		const { clips } = fromStore.getStateSnapshot();
 		const id = clips[clips.length - 1].id;
 		const { ext, mime } = this.#_getSupportedCodecFileExt();
 		const blob = new Blob(this.chunks, { type: mime });
 		const file = new File([blob], `Clip-${id}`, { type: mime });
 
-		let audioCtx = new AudioContext();
-		blob.arrayBuffer().then(arrBuf => {
-			console.log({ arrBuf });
-
-			audioCtx.decodeAudioData(arrBuf).then(decodedData => {
-				// const { sampleRate, destination, state } = audioCtx;
-				// console.log({ sampleRate, destination, state });
-				// decodedData.
-				let floatArr = decodedData.getChannelData(0);
-				console.log({ floatArr });
-
-				// const voiceEnd = detectVoiceEnd(decodedData, 2, 0.0010);
-				// console.log({ voiceEnd });  	
-			});
-		});
-
-		fromStore.dispatch(stopRecording({ file, ext }));
+		const { voiceEnd, voiceStart } = await handleAudioData(file);
+		console.log({ voiceEnd, voiceStart });
+		fromStore.dispatch(stopRecording({ file, ext, voiceStart, voiceEnd }));
 		this.chunks = [];
 	}
 
@@ -125,66 +111,4 @@ export class Recorder {
 			console.error(error);
 		}
 	}
-}
-
-// Returns the start time (in seconds) when the voice reaches a required energy threshold to be considered not silent.
-// If no suitable start time is found, it returns null
-function detectVoiceStart(audioBuffer, samples, threshold) {
-	// Square the threshold to compare to the square of the audio energy so there would be no need for a square root.
-	// Also normalize it to the number of samples.
-	threshold = threshold * threshold * samples;
-	const arrayBuffer = audioBuffer.getChannelData(0);
-	const cumsum = new Float32Array(audioBuffer.length);
-
-	if (audioBuffer.length > 0) {
-		let bit = arrayBuffer[0];
-		cumsum[0] = bit * bit;
-		for (let i = 1; i < audioBuffer.length; ++i) {
-			bit = arrayBuffer[i];
-			cumsum[i] = bit * bit + cumsum[i - 1];
-
-			const start = i - samples;
-			if (start < 0) {
-				if (cumsum[i] >= threshold) return 0;
-			} else {
-				if (cumsum[i] - cumsum[start] >= threshold) return (start + 1) / audioBuffer.sampleRate;
-			}
-		}
-	}
-
-	return null;
-}
-
-// Returns the end time (in seconds) when the voice reaches a required energy threshold to be considered not silent.
-// If no suitable end time is found, it returns null
-function detectVoiceEnd(audioBuffer, samples, threshold) {
-	// Square the threshold to compare to the square of the audio energy so there would be no need for a square root.
-	// Also normalize it to the number of samples.
-	threshold = threshold * threshold * samples;
-	const arrayBuffer = audioBuffer.getChannelData(0);
-	const cumsum = new Float32Array(audioBuffer.length);
-
-	if (audioBuffer.length > 0) {
-		let bit = arrayBuffer[audioBuffer.length - 1];
-		cumsum[audioBuffer.length - 1] = bit * bit;
-		for (let i = audioBuffer.length - 2; i >= 0; --i) {
-			bit = arrayBuffer[i];
-			cumsum[i] = bit * bit + cumsum[i + 1];
-
-			const end = i + samples;
-			if (end >= audioBuffer.length) {
-				if (cumsum[i] >= threshold) {
-					const result = audioBuffer.length - 1;
-					return result;
-				}
-			} else {
-				if (cumsum[i] - cumsum[end] >= threshold) {
-					const result = end / audioBuffer.sampleRate;
-					return result;
-				}
-			}
-		}
-	}
-
-	return null;
 }

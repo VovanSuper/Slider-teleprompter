@@ -30,14 +30,6 @@ export default (state, { action: { type }, payload }) => {
 				}),
 			};
 
-		case actionTypes.stopRecording:
-			return {
-				...state,
-				recording: false,
-				timer: null,
-				clips: state.clips.map(clip => (clip.id !== state.clips.length ? { ...clip } : { ...clip, ...payload })),
-			};
-
 		case actionTypes.setTimer:
 			return {
 				...state,
@@ -62,6 +54,14 @@ export default (state, { action: { type }, payload }) => {
 						  }
 						: clip
 				),
+			};
+
+		case actionTypes.stopRecording:
+			return {
+				...state,
+				recording: false,
+				timer: null,
+				clips: state.clips.map(clip => (clip.id !== state.clips.length ? { ...clip } : { ...clip, ...payload })),
 			};
 
 		default:

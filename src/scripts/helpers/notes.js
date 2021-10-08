@@ -1,7 +1,13 @@
-import { addDragHandler, playBtnPause, playBtnPlay } from './utils.js';
+import { addDragHandler, playBtnSetInitial, playBtnToggleIcon } from './utils.js';
 import createNoteCloserBtn from './closer-btn.js';
 
 const getNoteByIndex = index => document.querySelector(`.note[idx="${index}"]`);
+
+const renderClips = ({ clips }, rootEl) => {
+	const notesEl = document.querySelector('.notes');
+	clearNoteEls(notesEl);
+	clips.forEach((clip, i) => renderNote(clip, notesEl, rootEl));
+};
 
 const renderNote = (clip, notesEl, rootEl) => {
 	let noteEl = document.createElement('section');
@@ -15,9 +21,10 @@ const renderNote = (clip, notesEl, rootEl) => {
 	if (!!clip.file) {
 		const videoEl = addMediaElementToNote(noteClipEl, { ...clip });
 		// const surfer = createWave(clip.data, noteElFooter, crateMarkers(clip.slides));
-		const surfer = createWave(videoEl, noteElFooter, crateMarkers(clip.slides));
+		const markers = !!clip.voiceEnd ? [...createSlidesMarkers(clip.slides)].concat(createEndMarker({ voiceEnd: clip.voiceEnd })) : createSlidesMarkers(clip.slides);
+		const surfer = createWave(videoEl, noteElFooter, markers);
 		let wavePlayBtn = document.createElement('button');
-		wavePlayBtn.classList.add('btn-wave--play');
+		playBtnSetInitial(wavePlayBtn);
 
 		surfer.on('waveform-ready', () => {
 			// surfer.on('ready', () => {
@@ -49,12 +56,13 @@ const renderNote = (clip, notesEl, rootEl) => {
 			let currentSlideImg = null;
 			wavePlayBtn.addEventListener('click', surfer.playPause.bind(surfer));
 			wavePlayBtn.addEventListener('click', e => {
+				playBtnToggleIcon(wavePlayBtn);
 				noteSlidesNamesEl.children.length && !!noteSlidesNamesEl.querySelector('.slides-names') && noteSlidesNamesEl.removeChild(noteSlidesNamesEl.querySelector('.slides-names'));
 				if (!!clip.slides?.length && !currentSlideImg) {
 					currentSlideImg = renderNoteSlideImg(noteSlidesNamesEl);
 				}
 			});
-
+			surfer.on('finish', _ => playBtnSetInitial(wavePlayBtn));
 			surfer.on('audioprocess', currentSeekSec => {
 				const currentPlayBackTime = Math.round(currentSeekSec * 1000);
 				// clip.slides.forEach((slide) => {
@@ -115,12 +123,6 @@ const renderNote = (clip, notesEl, rootEl) => {
 	notesEl.appendChild(noteEl);
 
 	// return () =>
-};
-
-const renderClips = ({ clips }, rootEl) => {
-	const notesEl = document.querySelector('.notes');
-	clearNoteEls(notesEl);
-	clips.forEach((clip, i) => renderNote(clip, notesEl, rootEl));
 };
 
 const addNoteSlidesList = (noteContentUl, clip) => {
@@ -184,21 +186,23 @@ const addMediaElementToNote = (nodeSlidesContainerEl, { file, id, ...rest }) => 
 // const createWave = (blob, waveContainerEl, markers = []) => {
 const createWave = (mediaEl, waveContainerEl, markers = []) => {
 	const canvas = document.createElement('canvas');
+	const { width } = getComputedStyle(waveContainerEl);
+	const height = 75;
 	canvas.style.visibility = 'collapsed';
 	const ctx = canvas.getContext('2d');
-	const gradient = ctx.createLinearGradient(0, 10, 10, 0);
-	gradient.addColorStop(0, '#3030C6');
-	gradient.addColorStop(1, '#6767D9');
+	const waveColor = ctx.createLinearGradient(0, -height / 2, width, height);
+	waveColor.addColorStop(0, '#3091c6');
+	waveColor.addColorStop(1, '#2D2DC5');
 
 	const wavesurfer = WaveSurfer.create({
 		container: waveContainerEl,
 		mediaControls: true,
 		interact: true,
 		mediaType: 'video',
-		height: 75,
+		height,
 		responsive: true,
 		// waveColor: '#2D2DC5',
-		waveColor: gradient,
+		waveColor,
 		mediaControls: true,
 		closeAudioContext: true,
 		backend: 'MediaElement',
@@ -209,15 +213,21 @@ const createWave = (mediaEl, waveContainerEl, markers = []) => {
 	return wavesurfer;
 };
 
-const crateMarkers = slides =>
-	slides.map(({ time, id }, i) => ({
-		time: time / 1000,
-		label: `Slide ${id}`,
-		color: '#fd4e4e',
-		position: 'top',
-		markerId: i,
-		idx: id,
-	}));
+const createSlidesMarkers = slides => createMarkers(slides.map(slide => ({ idx: slide.id, position: 'top', color: 'var(--wave-marker-color)', label: `Slide ${slide.id}`, time: slide.time / 1000 })));
+const createEndMarker = ({ voiceEnd }) => createMarkers({ position: 'top', color: 'var(--wave-end-marker-color)', label: 'End', time: voiceEnd / 1000 });
+
+/** @param {Array<object>} markers */
+const createMarkers = markers => {
+	const getMarker = ({ time, idx = undefined, index = undefined, label = 'End', color = 'var(--wave-end-marker-color)', position = 'top' }) => ({
+		time,
+		idx,
+		label,
+		color,
+		position,
+		markerId: index,
+	});
+	return Array.isArray(markers) ? markers.map((marker, index) => getMarker({ ...marker, index })) : { ...getMarker(markers) };
+};
 
 const clearNoteEls = notesEl => {
 	!!notesEl.children.length && Array.from(notesEl.children).forEach(child => notesEl.removeChild(child));
