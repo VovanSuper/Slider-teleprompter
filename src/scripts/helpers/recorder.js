@@ -99,9 +99,9 @@ export class Recorder {
 		const blob = new Blob(this.chunks, { type: mime });
 		const file = new File([blob], `Clip-${id}`, { type: mime });
 
-		const { voiceEnd, voiceStart } = await handleAudioData(file);
+		const { voiceEnd, voiceStart, duration } = await handleAudioData(file);
 		console.log({ voiceEnd, voiceStart });
-		fromStore.dispatch(stopRecording({ file, ext, voiceStart, voiceEnd }));
+		fromStore.dispatch(stopRecording({ file, ext, voiceStart, voiceEnd, duration }));
 		this.chunks = [];
 	}
 
