@@ -60,7 +60,7 @@ export const playBtnToggleIcon = /** @param {HTMLButtonElement} wavePlayBtn */ w
 export const playBtnSetInitial = wavePlayBtn => {
 	wavePlayBtn.classList.remove('btn-wave--pause');
 	wavePlayBtn.classList.add('btn-wave--play');
-}
+};
 
 /**@param {HTMLElement} el  @param {HTMLElement} rootEl @param {number} clipDuration @param {number} clipId  */
 export const addDragHandler = (el, rootEl, clipDuration, clipId) => {
@@ -123,14 +123,15 @@ export const addDragHandler = (el, rootEl, clipDuration, clipId) => {
 
 /** @param {File} file */
 export const handleAudioData = async file => {
-	let audioCtx = new AudioContext();
+	let audioCtx = new AudioContext({ sampleRate: 44100 });
 	const audioData = await file.arrayBuffer();
 	const audioBuf = await audioCtx.decodeAudioData(audioData);
 	const { sampleRate, duration, length } = audioBuf;
 	console.log({ sampleRate, duration, length });
-	const voiceStart = detectVoiceStart(audioBuf, 10, 0.4);
-	const voiceEnd = detectVoiceEnd(audioBuf, 10, 0.2);
-	return { voiceStart, voiceEnd };
+	let [voiceStart, voiceEnd] = [detectVoiceStart(audioBuf, 10, 0.4), detectVoiceEnd(audioBuf, 10, 0.1)];
+	if (duration * 1000 - voiceEnd < 500) voiceEnd = null;
+	if (voiceStart < 500) voiceStart = null;
+	return { voiceStart, voiceEnd, duration: Math.round(duration * 1000) };
 };
 
 // Returns the start time (in milliseconds) when the voice reaches a required energy threshold to be considered not silent.

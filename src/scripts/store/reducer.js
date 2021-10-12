@@ -61,7 +61,16 @@ export default (state, { action: { type }, payload }) => {
 				...state,
 				recording: false,
 				timer: null,
-				clips: state.clips.map(clip => (clip.id !== state.clips.length ? { ...clip } : { ...clip, ...payload })),
+				clips: state.clips
+					.map(clip => (clip.id !== state.clips.length ? { ...clip } : { ...clip, ...payload }))
+					.map(({ duration, slides, ...rest }) => ({
+						duration,
+						...rest,
+						slides: slides.map(clipSlide => ({
+							...clipSlide,
+							time: duration - clipSlide.time < 0 ? duration - 500 : duration - clipSlide.time < 500 ? clipSlide.time - 500 : clipSlide.time,
+						})),
+					})),
 			};
 
 		default:

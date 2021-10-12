@@ -47,7 +47,7 @@ const renderNote = (clip, notesEl, rootEl) => {
 			const { markers } = surfer.markers;
 			const surferRootEl = surfer.container.querySelector('wave > canvas');
 
-			markers.forEach(marker => addDragHandler(marker.el, surferRootEl, clipDuration, clip.id));
+			markers.filter(marker => marker.label.trim().toLowerCase() !== 'end').forEach(marker => addDragHandler(marker.el, surferRootEl, clipDuration, clip.id));
 			// wavePlayBtn.addEventListener('click', function PlaySurfer(_e) {
 			//   if (!!surfer.isPlaying()) return surfer.pause();
 			//   surfer.play();

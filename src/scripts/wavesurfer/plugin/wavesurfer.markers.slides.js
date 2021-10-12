@@ -238,7 +238,8 @@ var MarkersPlugin = /*#__PURE__*/function () {
 
       var label = marker.label;
       var time = marker.time;
-      var el = document.createElement('marker');    
+      var el = document.createElement('marker');
+      el.style.zIndex = 10;
       el.className = "wavesurfer-marker";
       this.style(el, {
         position: "absolute",
@@ -255,7 +256,7 @@ var MarkersPlugin = /*#__PURE__*/function () {
       this.style(line, {
         "flex-grow": 1,
         "margin-left": "50%",
-        background: "#FD4E4E",
+        background: marker.color || "#FD4E4E",
         width: "2px",
         opacity: 0.9
       });
@@ -263,7 +264,6 @@ var MarkersPlugin = /*#__PURE__*/function () {
       var labelDiv = document.createElement('div');
 
       var point = markerElement || this._createPointerSVG(marker.color, marker.position, label);
-
       labelDiv.appendChild(point);
 
       // if (label) {
