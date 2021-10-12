@@ -123,12 +123,12 @@ export const addDragHandler = (el, rootEl, clipDuration, clipId) => {
 
 /** @param {File} file */
 export const handleAudioData = async file => {
-	let audioCtx = new AudioContext({ sampleRate: 44100 });
+	let audioCtx = new AudioContext();
 	const audioData = await file.arrayBuffer();
 	const audioBuf = await audioCtx.decodeAudioData(audioData);
 	const { sampleRate, duration, length } = audioBuf;
 	console.log({ sampleRate, duration, length });
-	let [voiceStart, voiceEnd] = [detectVoiceStart(audioBuf, 10, 0.4), detectVoiceEnd(audioBuf, 10, 0.1)];
+	let [voiceStart, voiceEnd] = [detectVoiceStart(audioBuf, 10, 0.4), detectVoiceEnd(audioBuf, 10, 0.2)];
 	if (duration * 1000 - voiceEnd < 500) voiceEnd = null;
 	if (voiceStart < 500) voiceStart = null;
 	return { voiceStart, voiceEnd, duration: Math.round(duration * 1000) };
