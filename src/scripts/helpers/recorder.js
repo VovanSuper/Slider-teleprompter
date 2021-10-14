@@ -1,7 +1,7 @@
 import fromStore from '../store/store.js';
 import { startRecording, stopRecording } from '../store/actions.js';
-import { getStatusBoxEl } from './utils.js';
-import { handleAudioData, timeFuncs } from '../helpers/utils.js';
+import { handleAudioData, setError } from '../helpers/utils.js';
+import { timeFuncs } from '../helpers/timer.js';
 
 const { setStoreTimer } = timeFuncs;
 
@@ -68,11 +68,11 @@ export class Recorder {
 			return this.stream;
 		} catch (error) {
 			if (error.name === 'ConstraintNotSatisfiedError') {
-				this.#_errorMsg('Video  is not supported by your device.');
+				setError('Video  is not supported by your device.');
 			} else if (error.name === 'PermissionDeniedError') {
-				this.#_errorMsg('Permissions have not been granted to use your microphone, you need to allow the page access to your devices');
+				setError('Permissions have not been granted to use your microphone, you need to allow the page access to your devices');
 			}
-			this.#_errorMsg('getUserMedia error: ' + error.name, error);
+			setError('getUserMedia error: ' + error.name, error);
 		}
 	}
 
@@ -103,12 +103,5 @@ export class Recorder {
 		console.log({ voiceEnd, voiceStart });
 		fromStore.dispatch(stopRecording({ file, ext, voiceStart, voiceEnd, duration }));
 		this.chunks = [];
-	}
-
-	#_errorMsg(msg, error = undefined) {
-		getStatusBoxEl().innerHTML += '<p>' + msg + '</p>';
-		if (typeof error !== 'undefined') {
-			console.error(error);
-		}
 	}
 }

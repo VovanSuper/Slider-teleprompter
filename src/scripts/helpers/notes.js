@@ -9,13 +9,34 @@ const renderClips = ({ clips }, rootEl) => {
 	clips.forEach((clip, i) => renderNote(clip, notesEl, rootEl));
 };
 
-const renderNote = (clip, notesEl, rootEl) => {
+const renderNoteHtmlStruct = (clip, rootEl) => {
 	let noteEl = document.createElement('section');
 	let noteElHeader = document.createElement('header');
 	let noteElFooter = document.createElement('footer');
 	let noteElContent = document.createElement('div');
 	let noteSlidesNamesEl = document.createElement('div');
 	let noteClipEl = document.createElement('div');
+	noteElHeader.classList.add('note-header');
+	noteElFooter.classList.add('note-footer');
+	noteElContent.classList.add('note-content');
+	noteSlidesNamesEl.classList.add('note-slides', 'note-content__item');
+	noteClipEl.classList.add('note-media', 'note-content__item');
+	noteElContent.appendChild(noteSlidesNamesEl);
+	noteElContent.appendChild(noteClipEl);
+	noteElHeader.innerHTML = `<h1>Clip ${clip.id}</h1>`;
+	noteEl.appendChild(noteElHeader);
+	noteEl.appendChild(noteElContent);
+	noteEl.appendChild(noteElFooter);
+	noteEl.classList.add('note');
+	noteEl.setAttribute('idx', clip.id);
+	createNoteCloserBtn(noteEl, rootEl);
+	return [noteEl, noteSlidesNamesEl, noteClipEl, noteElFooter];
+};
+
+const renderNote = (clip, notesEl, rootEl) => {
+	const [noteEl, noteSlidesNamesEl, noteClipEl, noteElFooter] = renderNoteHtmlStruct(clip, rootEl);
+	notesEl.appendChild(noteEl);
+
 	if (!!clip.slides?.length) addNoteSlidesList(noteSlidesNamesEl, clip);
 
 	if (!!clip.file) {
@@ -46,39 +67,24 @@ const renderNote = (clip, notesEl, rootEl) => {
 			const clipDuration = surfer.getDuration();
 			const { markers } = surfer.markers;
 			const surferRootEl = surfer.container.querySelector('wave > canvas');
-
 			markers.filter(marker => marker.label.trim().toLowerCase() !== 'end').forEach(marker => addDragHandler(marker.el, surferRootEl, clipDuration, clip.id));
-			// wavePlayBtn.addEventListener('click', function PlaySurfer(_e) {
-			//   if (!!surfer.isPlaying()) return surfer.pause();
-			//   surfer.play();
-			//   return () => wavePlayBtn.removeEventListener(PlaySurfer);
-			// });
+
 			let currentSlideImg = null;
 			wavePlayBtn.addEventListener('click', surfer.playPause.bind(surfer));
-			wavePlayBtn.addEventListener('click', e => {
+			wavePlayBtn.addEventListener('click', function HandleWavePlayclick() {
 				playBtnToggleIcon(wavePlayBtn);
 				noteSlidesNamesEl.children.length && !!noteSlidesNamesEl.querySelector('.slides-names') && noteSlidesNamesEl.removeChild(noteSlidesNamesEl.querySelector('.slides-names'));
 				if (!!clip.slides?.length && !currentSlideImg) {
 					currentSlideImg = renderNoteSlideImg(noteSlidesNamesEl);
 				}
+				return () => wavePlayBtn.removeEventListener('click', HandleWavePlayclick);
 			});
+			surfer.on('play', e => console.log({ e, status: 'Playing' }));
+			surfer.on('pause', e => console.log({ e, status: 'Paused' }));
+			surfer.on('finish', e => console.log({ e, status: 'finish' }));
 			surfer.on('finish', _ => playBtnSetInitial(wavePlayBtn));
 			surfer.on('audioprocess', currentSeekSec => {
 				const currentPlayBackTime = Math.round(currentSeekSec * 1000);
-				// clip.slides.forEach((slide) => {
-				//   if (slide.time === currentPlayBackTime) {
-				//     (allCurrentSlides || []).forEach((imgEl) => {
-				//       imgEl.style.zIndex = '0';
-				//     });
-				//     const currentSlide = allCurrentSlides.find((imgEl) => {
-				//       const slideIdx = +imgEl.getAttribute('data-slide-idx');
-				//       const isSame = slideIdx === slide.id;
-				//       return isSame;
-				//       //.querySelector(`.slides-images--container > img[data-slide-idx="${slide.id}"]`);
-				//     });
-				//     if (!!currentSlide) currentSlide.style.zIndex = '9999';
-				//   }
-				// });
 				const firstSlideImg = clip.slides[0].imgUrl;
 				console.log({ firstSlideImg });
 				clip.slides.forEach(slide => {
@@ -89,40 +95,9 @@ const renderNote = (clip, notesEl, rootEl) => {
 					}
 				});
 			});
-
-			surfer.on('play', e => {
-				console.log({ e, status: 'Playing' });
-				//TODO: check the moving part relative to markers !!!!
-			});
-			surfer.on('pause', e => {
-				console.log({ e, status: 'Paused' });
-			});
-			surfer.on('finish', e => {
-				console.log({ e, status: 'finish' });
-			});
 		});
-
 		noteElFooter.appendChild(wavePlayBtn);
 	}
-
-	noteElHeader.classList.add('note-header');
-	noteElFooter.classList.add('note-footer');
-
-	noteElContent.classList.add('note-content');
-	noteSlidesNamesEl.classList.add('note-slides', 'note-content__item');
-	noteClipEl.classList.add('note-media', 'note-content__item');
-	noteElContent.appendChild(noteSlidesNamesEl);
-	noteElContent.appendChild(noteClipEl);
-	noteElHeader.innerHTML = `<h1>Clip ${clip.id}</h1>`;
-	noteEl.appendChild(noteElHeader);
-	noteEl.appendChild(noteElContent);
-	noteEl.appendChild(noteElFooter);
-	noteEl.classList.add('note');
-	noteEl.setAttribute('idx', clip.id);
-	createNoteCloserBtn(noteEl, rootEl);
-	notesEl.appendChild(noteEl);
-
-	// return () =>
 };
 
 const addNoteSlidesList = (noteContentUl, clip) => {
@@ -186,7 +161,7 @@ const addMediaElementToNote = (nodeSlidesContainerEl, { file, id, ...rest }) => 
 // const createWave = (blob, waveContainerEl, markers = []) => {
 const createWave = (mediaEl, waveContainerEl, markers = []) => {
 	const canvas = document.createElement('canvas');
-	const { width } = getComputedStyle(waveContainerEl);
+	const { width } = waveContainerEl.getBoundingClientRect();
 	const height = 75;
 	canvas.style.visibility = 'collapsed';
 	const ctx = canvas.getContext('2d');

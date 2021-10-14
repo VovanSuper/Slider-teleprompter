@@ -11,7 +11,7 @@
 	vertical-align: middle;
 }
 
- .bespoke-marp-presenter-container iframe.bespoke-marp-presenter-next .header {
+.bespoke-marp-presenter-container iframe.bespoke-marp-presenter-next .header {
 	display: none !important;
 }
 
@@ -25,14 +25,14 @@
 }
 
 #status_box {
-	padding: 1rem;
+	padding: 0 	1rem;
 	align-self: center;
 }
 
 #status_box p {
 	vertical-align: middle;
-	width: 10rem;
-	height: 4rem;
+	max-width: 10rem;
+	line-height: 4rem;
 	color: var(--color-white);
 	position: relative;
 }

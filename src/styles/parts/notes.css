@@ -49,14 +49,13 @@
 	height: 100%;
 	overflow: hidden;
 	position: relative;
+	inset: 0;
 }
 
 .note-content .slides-images--container > img.slide-img {
 	max-width: 100%;
-	max-height: 90%;
-	object-fit: contain;
-	position: absolute;
-	inset: 0;
+	height: 98%;
+	object-fit: cover;
 }
 
 .slides-names {

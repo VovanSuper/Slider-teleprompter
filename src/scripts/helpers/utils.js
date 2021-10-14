@@ -1,56 +1,8 @@
 import fromStore from '../store/store.js';
-import { setTimer, updateClipTimePoint } from '../store/actions.js';
+import { updateClipTimePoint } from '../store/actions.js';
 
-const MARP_BESPOKE_KEY_FROM_HISTORY = window.history?.state?.marpBespokeSyncKey;
-const currentSlideLSSubKey = !!MARP_BESPOKE_KEY_FROM_HISTORY ? `bespoke-marp-sync-${MARP_BESPOKE_KEY_FROM_HISTORY}` : 'bespoke-marp-sync-';
-
-const getBespokeLSKey = () => {
-	for (let i = 0; i < localStorage.length; i++) {
-		const key = localStorage.key(i);
-		if (key.startsWith(currentSlideLSSubKey)) {
-			return key;
-		}
-	}
-};
-
-const readLocalStorageBespokeData = () => JSON.parse(localStorage.getItem(getBespokeLSKey()));
-
-export const readBespokeCurrentSlideIndex = () => {
-	return new Promise((resolve, reject) => {
-		setTimeout(() => {
-			const data = readLocalStorageBespokeData();
-			const id = !!data && !!data['index'] ? parseInt(data['index']) + 1 : 1;
-			// const id = parseInt(getCurrentBespokeIndex()) + 1 || 1;
-			// console.log({ id });
-			return resolve({ id });
-		}, 1);
-	});
-};
-
-export const getStatusBoxEl = () => document.querySelector('#status_box');
-
-class SimpleTimer {
-	startTime = undefined;
-
-	constructor() {
-		this.#_start();
-	}
-
-	#_start() {
-		this.startTime = new Date().getTime();
-	}
-
-	getDiffMs() {
-		return new Date().getTime() - this.startTime;
-	}
-}
-
-const createTimer = () => new SimpleTimer();
-
-export const timeFuncs = {
-	setStoreTimer: isNewUp => fromStore.dispatch(setTimer({ timer: isNewUp ? createTimer() : null })),
-	getElapsedTime: () => fromStore.getStateSnapshot().timer?.getDiffMs() || null,
-};
+const statusBoxEl = document.querySelector('#status_box');
+const downloadBtn = document.querySelector('.btn-download');
 
 export const playBtnToggleIcon = /** @param {HTMLButtonElement} wavePlayBtn */ wavePlayBtn => {
 	wavePlayBtn.classList.toggle('btn-wave--pause');
@@ -60,6 +12,70 @@ export const playBtnToggleIcon = /** @param {HTMLButtonElement} wavePlayBtn */ w
 export const playBtnSetInitial = wavePlayBtn => {
 	wavePlayBtn.classList.remove('btn-wave--pause');
 	wavePlayBtn.classList.add('btn-wave--play');
+};
+
+export const handleRecodingStatus = () => {
+	const recordingSelector = fromStore.select(state => state.recording);
+	recordingSelector(recording => {
+		statusBoxEl.innerHTML = !!recording ? `<p>Recording</P>` : '<small style="color: #ccc; font-size: small;">Click `R` to record</small>';
+		if (recording) downloadBtn.classList.add('btn-recording');
+		else downloadBtn.classList.remove('btn-recording');
+	});
+};
+
+export const setError = (msg, error = undefined) => {
+	statusBoxEl.innerHTML += '<p>' + msg + '</p>';
+	if (typeof error !== 'undefined') {
+		console.error(error);
+	}
+};
+
+export const handleDownloadClick = () => {
+	fromStore.select(state => state.clips.length)(len => (downloadBtn.style.opacity = !!len ? 1 : 0));
+
+	downloadBtn.addEventListener('click', async function downloadHandler(e) {
+		const { clips, recording } = fromStore.getStateSnapshot();
+		if (recording) return;
+
+		let meta = { clips: [] };
+		const dirHandler = await window.showDirectoryPicker();
+
+		await Promise.all(
+			// allRecs.map(async ({ file, slides, id, ext }) => {
+			clips.map(async ({ id, slides, file, ext }) => {
+				// let fileHandle = await window.showSaveFilePicker(audiofileOpts);
+
+				// const file = new File([data], `Clip-${id}`);
+				const fileHandle = await dirHandler.getFileHandle(`Clip-${id}${ext}`, { create: true });
+				const writable = await fileHandle.createWritable();
+
+				await writable.write(file, `${fileHandle.name}${ext}`, file.type);
+				await writable.close();
+
+				meta = {
+					clips: meta.clips.concat({
+						id,
+						slides: slides.map(({ time, id, ...rest }) => ({ time, id })),
+						// audio: audioBas64,
+						file: `${file.name}${ext}`,
+					}),
+				};
+			})
+		)
+			.finally(async () => {
+				// let fileHandle = await window.showSaveFilePicker(metadataOpts);
+
+				const fileHandle = await dirHandler.getFileHandle('clips-metadata.json', { create: true });
+				const writable = await fileHandle.createWritable();
+				await writable.write(JSON.stringify(meta), 'clips-metadata.json');
+				await writable.close();
+
+				return () => downloadBtn().removeEventListener('click', downloadHandler);
+			})
+			.catch(e => {
+				console.error('Error writing files : ', e);
+			});
+	});
 };
 
 /**@param {HTMLElement} el  @param {HTMLElement} rootEl @param {number} clipDuration @param {number} clipId  */
