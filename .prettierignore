@@ -1,0 +1,13 @@
+**/node_modules
+.github
+.git
+.vscode
+dist
+build
+coverage
+**/slides/**
+**/src/scripts/wavesurfer/**
+**/src/index.html
+**/src/index.html.tmpl
+**/src/index.html.back
+**/*.svg

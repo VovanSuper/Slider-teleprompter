@@ -1,10 +1,12 @@
 {
-  "printWidth": 205,
-  "singleQuote": true,
-  "arrowParens": "avoid",
-  "embeddedLanguageFormatting": "auto",
-  "quoteProps": "as-needed",
-  "semi": true,
-  "trailingComma": "es5",
-  "useTabs": true
+	"printWidth": 200,
+	"endOfLine": "crlf",
+	"tabWidth": 2,
+	"singleQuote": true,
+	"arrowParens": "avoid",
+	"embeddedLanguageFormatting": "auto",
+	"quoteProps": "as-needed",
+	"semi": true,
+	"trailingComma": "es5",
+	"useTabs": true
 }

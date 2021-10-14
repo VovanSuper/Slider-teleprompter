@@ -72,30 +72,30 @@ const templateHTMLPath = `${srcPath}/${templateName}`;
 const outputFile = join(__dirname, srcPath, `index.html`);
 
 marpCli([markdownSrc])
-  .then((exitStatus) => {
-    if (exitStatus > 0) {
-      throw new Error(`Failure (Exit status: ${exitStatus})`);
-    } else {
-      const generatedHTML = readFileSync(join(__dirname, outputHTML), { encoding: 'utf-8' }).toString();
-      const templateHTML = readFileSync(join(__dirname, templateHTMLPath), { encoding: 'utf-8' }).toString();
-      const parsedSlidesHTML = parse(generatedHTML);
+	.then(exitStatus => {
+		if (exitStatus > 0) {
+			throw new Error(`Failure (Exit status: ${exitStatus})`);
+		} else {
+			const generatedHTML = readFileSync(join(__dirname, outputHTML), { encoding: 'utf-8' }).toString();
+			const templateHTML = readFileSync(join(__dirname, templateHTMLPath), { encoding: 'utf-8' }).toString();
+			const parsedSlidesHTML = parse(generatedHTML);
 
-      const $ = cheerio.load(templateHTML);
-      const styles = parsedSlidesHTML.querySelectorAll('style');
-      const content = parsedSlidesHTML.querySelector('body').innerHTML;
+			const $ = cheerio.load(templateHTML);
+			const styles = parsedSlidesHTML.querySelectorAll('style');
+			const content = parsedSlidesHTML.querySelector('body').innerHTML;
 
-      styles.forEach((style) => {
-        if (style.rawTagName === 'style') {
-          let styleNode = '<style>' + style.text + '</style>';
-          $('head').prepend(styleNode);
-        }
-      });
-      $('#root-main').append(content);
+			styles.forEach(style => {
+				if (style.rawTagName === 'style') {
+					let styleNode = '<style>' + style.text + '</style>';
+					$('head').prepend(styleNode);
+				}
+			});
+			$('#root-main').append(content);
 
-      writeFileSync(outputFile, $.html({ decodeEntities: false, xmlMode: false }), { encoding: 'utf-8' });
-      if (existsSync(assetsSrcPath)) {
-        copySync(assetsSrcPath, assetsDestPath);
-      }
-    }
-  })
-  .catch(console.error);
+			writeFileSync(outputFile, $.html({ decodeEntities: false, xmlMode: false }), { encoding: 'utf-8' });
+			if (existsSync(assetsSrcPath)) {
+				copySync(assetsSrcPath, assetsDestPath);
+			}
+		}
+	})
+	.catch(console.error);

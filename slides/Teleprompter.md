@@ -8,6 +8,7 @@ Before we dive into Kubernetes, let's take the time to explore how the infrastru
 -->
 
 ---
+
 ![](assets/648_428146.svg)
 
 <!--
@@ -19,6 +20,7 @@ In the past few years. the industry has experienced a shift towards developing .
 -->
 
 ---
+
 ![](assets/648_428143.svg)
 
 <!--
@@ -30,6 +32,7 @@ In the past few years. the industry has experienced a shift towards developing .
 -->
 
 ---
+
 ![](assets/648_428139.svg)
 
 <!--
@@ -41,6 +44,7 @@ It comes as no surprise that more and more companies are breaking down their app
 -->
 
 ---
+
 ![](assets/648_428130.svg)
 
 <!--
@@ -56,6 +60,7 @@ As an example you might refactor a single app into 4 components:
 -->
 
 ---
+
 ![](assets/648_428124.svg)
 
 <!--
@@ -67,6 +72,7 @@ Apps that are smaller in scope are:
 -->
 
 ---
+
 ![](assets/648_428118.svg)
 
 <!--
@@ -77,6 +83,7 @@ Apps that are smaller in scope are:
 -->
 
 ---
+
 ![](assets/648_428112.svg)
 
 <!--
@@ -87,6 +94,7 @@ Apps that are smaller in scope are:
 -->
 
 ---
+
 ![](assets/648_428015.svg)
 
 <!--
@@ -100,6 +108,7 @@ Developing services out of smaller components introduces a different challenge.
 -->
 
 ---
+
 ![](assets/648_427889.svg)
 
 <!--
@@ -111,6 +120,7 @@ Imagine being tasked with migrating a single app into a collection of component.
 -->
 
 ---
+
 ![](assets/648_427771.svg)
 
 <!--
@@ -122,6 +132,7 @@ When, for every application, you can refactor the same in a collection of four c
 -->
 
 ---
+
 ![](assets/648_427234.svg)
 
 <!--
