@@ -31,7 +31,9 @@
 		"lite": "npx lite-server",
 		"sample": "run-s deck:teleprompter:build start",
 		"prettier": "npx prettier --check .",
-		"prettier-fix": "npx prettier --write . --ignore-unknown"
+		"prettier-fix": "npx prettier --write . --ignore-unknown",
+		"pre-commit": "pretty-quick --pattern \"src/**/*.(css|js)\"",
+		"prepare": "husky install"
 	},
 	"devDependencies": {
 		"@marp-team/marp-cli": "^1.4.1",
@@ -51,16 +53,7 @@
 		"prettier": "^2.4.1",
 		"pretty-quick": "^3.1.1",
 		"wavesurfer.js": "^5.2.0",
-		"yargs": "^17.2.1"
-	},
-	"husky": {
-		"hooks": {
-			"pre-commit": "pretty-quick --pattern \"src/**/*.(css|js)\""
-		}
-	},
-	"lint-staged": {
-		"*.(css|html|md)": [
-			"npx prettier --write"
-		]
+		"yargs": "^17.2.1",
+		"husky": "^7.0.0"
 	}
 }
