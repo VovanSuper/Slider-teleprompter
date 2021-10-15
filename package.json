@@ -39,7 +39,7 @@
 		"@types/cheerio": "^0.22.30",
 		"@types/markdown-it": "^12.2.3",
 		"@types/wavesurfer.js": "^5.2.2",
-		"@types/web": "^0.0.40",
+		"@types/web": "^0.0.41",
 		"cheerio": "^1.0.0-rc.10",
 		"fs-extra": "^10.0.0",
 		"lint-staged": "^11.2.3",
@@ -55,7 +55,7 @@
 	},
 	"husky": {
 		"hooks": {
-			"pre-commit": "npx lint-staged"
+			"pre-commit": "pretty-quick --pattern \"src/**/*.(css|js)\""
 		}
 	},
 	"lint-staged": {
